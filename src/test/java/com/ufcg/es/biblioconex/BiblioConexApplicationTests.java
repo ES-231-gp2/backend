@@ -1,4 +1,4 @@
-package com.ufcg.es.biblioConex;
+package com.ufcg.es.biblioconex;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
