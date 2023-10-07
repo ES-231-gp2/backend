@@ -4,7 +4,7 @@ import com.ufcg.es.biblioconex.dto.AlunoDTO;
 import com.ufcg.es.biblioconex.model.Aluno;
 import com.ufcg.es.biblioconex.model.Turma;
 import com.ufcg.es.biblioconex.repository.AlunoRepository;
-import com.ufcg.es.biblioconex.service.aluno.AlunoCriarService;
+import com.ufcg.es.biblioconex.repository.TurmaRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,23 +27,27 @@ class AlunoCriarServiceTests {
     @Autowired
     AlunoRepository alunoRepository;
 
+    @Autowired
+    TurmaRepository turmaRepository;
+
     Aluno aluno;
 
     AlunoDTO alunoDTO;
 
     Turma turma;
+
     @BeforeEach
     void setup() {
-        turma = new Turma();
+        turma = turmaRepository.save(Turma.builder().build());
         aluno = Aluno.builder()
                 .nome("Aluno Ponto da Silva")
                 .turma(turma)
-                .email("aluno1@gmail.com")
+                .email("alunoponto@gmail.com")
                 .build();
        alunoDTO = AlunoDTO.builder()
                 .nome("Aluno Ponto da Silva")
                 .turma(turma)
-                .email("aluno1@gmail.com")
+                .email("alunoponto@gmail.com")
                 .build();
     }
 
