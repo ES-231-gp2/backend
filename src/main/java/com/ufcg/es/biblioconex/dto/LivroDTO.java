@@ -32,6 +32,7 @@ public class LivroDTO {
     private String titulo;
 
     @JsonProperty("autores")
+    @Builder.Default
     @Size.List(@Size(min = 1, message = "Deve haver pelo menos um autor"))
     private List<String> autores = new ArrayList<>();
 
@@ -47,7 +48,7 @@ public class LivroDTO {
     private String paginas;
 
     @JsonProperty("edicao")
-    private String edicao;
+    private Integer edicao;
 
     @JsonProperty("descricao")
     private String descricao;
@@ -71,12 +72,27 @@ public class LivroDTO {
             JsonNode volumeInfoNode = rootNode.get("items").get(0).get("volumeInfo");
 
             livro.setIsbn(isbn);
-            livro.setTitulo(volumeInfoNode.get("title").asText());
-            livro.setEditora(volumeInfoNode.get("publisher").asText());
-            livro.setAno(volumeInfoNode.get("publishedDate").asText().substring(0, 4));
-            livro.setPaginas(volumeInfoNode.get("pageCount").asText());
-            livro.setDescricao(volumeInfoNode.get("description").asText());
-            livro.setCapa(volumeInfoNode.get("imageLinks").get("thumbnail").asText().replace("&edge=curl", ""));
+            if (volumeInfoNode.has("title")) {
+                livro.setTitulo(volumeInfoNode.get("title").asText());
+            }
+            if (volumeInfoNode.has("title")) {
+                livro.setTitulo(volumeInfoNode.get("title").asText());
+            }
+            if (volumeInfoNode.has("publisher")) {
+                livro.setEditora(volumeInfoNode.get("publisher").asText());
+            }
+            if (volumeInfoNode.has("publishedDate")) {
+                livro.setAno(volumeInfoNode.get("publishedDate").asText().substring(0, 4));
+            }
+            if (volumeInfoNode.has("pageCount")) {
+                livro.setPaginas(volumeInfoNode.get("pageCount").asText());
+            }
+            if (volumeInfoNode.has("description")) {
+                livro.setDescricao(volumeInfoNode.get("description").asText());
+            }
+            if (volumeInfoNode.has("imageLinks")) {
+                livro.setCapa(volumeInfoNode.get("imageLinks").get("thumbnail").asText().replace("&edge=curl", ""));
+            }
 
             ArrayNode autoresNode = (ArrayNode) volumeInfoNode.get("authors");
             for (JsonNode autorNode : autoresNode) {

@@ -44,7 +44,16 @@ public class Livro {
     @Column(nullable = false)
     private String ano;
 
+    @JsonProperty("paginas")
+    private Integer paginas;
+
     @JsonProperty("edicao")
-    @Column(nullable = false)
-    private String edicao;
+    private Integer edicao;
+
+    @JsonProperty("descricao")
+    @Lob
+    private String descricao;
+
+    @JsonProperty("capa")
+    private String capa;
 }

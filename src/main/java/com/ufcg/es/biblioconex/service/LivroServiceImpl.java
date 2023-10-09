@@ -27,13 +27,13 @@ public class LivroServiceImpl implements LivroService {
     @Override
     public Livro cadastrarLivro(LivroDTO livroDTO) {
         Livro livro = modelMapper.map(livroDTO, Livro.class);
-        livro.setIsbn(livro.getIsbn().replaceAll("[^0-9]", ""));
+        livro.setIsbn(formataIsbn(livroDTO.getIsbn()));
         return livroRepository.save(livro);
     }
 
     @Override
     public LivroDTO buscarLivroPorIsbn(String isbn) {
-        isbn = isbn.replaceAll("[^0-9]", "");
+        isbn = formataIsbn(isbn);
         String params = "?q=ISBN:" + isbn + "&orderBy=relevance&maxResults=1";
         String url = URL + params + "&key=" + KEY;
 
@@ -60,6 +60,29 @@ public class LivroServiceImpl implements LivroService {
     @Override
     public void removerLivro(Long id) {
         livroRepository.deleteById(id);
+    }
+
+    private String formataIsbn(String isbn) {
+        if (isbn == null || isbn.isEmpty()) {
+            return "";
+        }
+
+        String cleanIsbn = isbn.replaceAll("[^0-9]", "");
+
+        if (cleanIsbn.length() == 10) {
+            isbn = cleanIsbn.substring(0, 2) + "-" +
+                    cleanIsbn.substring(2, 5) + "-" +
+                    cleanIsbn.substring(5, 9) + "-" +
+                    cleanIsbn.charAt(9);
+        } else if (cleanIsbn.length() == 13) {
+            isbn = cleanIsbn.substring(0, 3) + "-" +
+                    cleanIsbn.substring(3, 5) + "-" +
+                    cleanIsbn.substring(5, 9) + "-" +
+                    cleanIsbn.substring(9, 12) + "-" +
+                    cleanIsbn.charAt(12);
+        }
+
+        return isbn;
     }
 
     private String getHttpResponse(String url) {
