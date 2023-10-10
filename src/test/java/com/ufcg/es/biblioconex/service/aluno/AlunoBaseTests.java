@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("Testes do Serviço de criação de aluno")
+@DisplayName("Base de testes de Aluno")
 public class AlunoBaseTests {
 
     @Autowired
