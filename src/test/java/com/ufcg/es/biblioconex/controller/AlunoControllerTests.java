@@ -76,7 +76,7 @@ public class AlunoControllerTests {
         String responseJsonString = driver.perform(post(URI_ALUNOS)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(alunoDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
 
@@ -108,7 +108,7 @@ public class AlunoControllerTests {
         CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
 
         assertEquals("Erros de validacao encontrados", error.getMessage());
-        assertTrue(error.getErrors().contains("O nome não pode ser vazio"));
+        assertTrue(error.getErrors().contains("O nome nao pode ser vazio"));
     }
 
     @Test

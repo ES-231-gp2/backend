@@ -12,14 +12,13 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "turma")
+@Table(name = "turmas")
 public class Turma {
     @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
-
 
     @JsonProperty("alunos")
     @OneToMany(mappedBy = "turma", orphanRemoval = true)

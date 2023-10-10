@@ -11,17 +11,16 @@ import lombok.*;
 @AllArgsConstructor
 public class AlunoDTO {
 
-
     @JsonProperty("nome")
     @NotBlank(message = "O nome nao pode ser vazio")
     String nome;
 
     @JsonProperty("email")
     @NotBlank(message = "Email nao pode ser vazio")
-    @Email(message = "Email inválido")
+    @Email(message = "Email invalido")
     String email;
 
     @JsonProperty("turma")
-    @NotBlank(message = "Turma nao pode ser vazia")
+    @NotNull(message = "Turma nao pode ser vazia")
     Turma turma;
 }
