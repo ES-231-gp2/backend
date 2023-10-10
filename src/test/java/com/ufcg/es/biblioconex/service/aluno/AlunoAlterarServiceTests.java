@@ -38,7 +38,7 @@ public class AlunoAlterarServiceTests extends AlunoBaseTests {
     void quandoAlteramosTurmaAluno() {
         // Arrange
         alunoRepository.save(aluno);
-        Turma turma2 = turmaRepository.save(Turma.builder().build());
+        Turma turma2 = turmaRepository.save(Turma.builder().nome("Turma 2").build());
         alunoPostPutRequestDTO.setTurma(turma2);
         // Act
         Aluno resultado = driver.alterar(aluno.getId(), alunoPostPutRequestDTO);
@@ -46,7 +46,7 @@ public class AlunoAlterarServiceTests extends AlunoBaseTests {
         // Assert
         assertAll(
                 () -> assertEquals(1, alunoRepository.count()),
-                () -> assertEquals(alunoPostPutRequestDTO.getTurma().getId(), resultado.getTurma().getId())
+                () -> assertEquals(alunoPostPutRequestDTO.getTurma().getNome(), resultado.getTurma().getNome())
         );
     }
 
