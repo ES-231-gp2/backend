@@ -19,42 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Transactional
 @DisplayName("Testes do Serviço de criação de aluno")
-class AlunoCriarServiceTests {
+class AlunoCriarServiceTests extends AlunoBaseTests {
 
     @Autowired
     AlunoCriarService driver;
 
-    @Autowired
-    AlunoRepository alunoRepository;
-
-    @Autowired
-    TurmaRepository turmaRepository;
-
-    Aluno aluno;
-
-    AlunoPostPutRequestDTO alunoPostPutRequestDTO;
-
-    Turma turma;
-
-    @BeforeEach
-    void setup() {
-        turma = turmaRepository.save(Turma.builder().build());
-        aluno = Aluno.builder()
-                .nome("Aluno Ponto da Silva")
-                .turma(turma)
-                .email("alunoponto@gmail.com")
-                .build();
-       alunoPostPutRequestDTO = AlunoPostPutRequestDTO.builder()
-                .nome("Aluno Ponto da Silva")
-                .turma(turma)
-                .email("alunoponto@gmail.com")
-                .build();
-    }
-
-    @AfterEach
-    void tearDown() {
-        alunoRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("Quando criamos um aluno primeiro")
