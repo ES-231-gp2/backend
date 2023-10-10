@@ -17,6 +17,8 @@ public class AlunoController {
 
     @Autowired
     AlunoCriarService alunoCriarService;
+    @Autowired
+    AlunoAlterarService alunoAlterarService;
 
     @PostMapping()
     public ResponseEntity<?> criarAluno(
@@ -24,5 +26,14 @@ public class AlunoController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(alunoCriarService.criar(alunoPostPutRequestDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> alterarAluno(
+            @PathVariable Long id,
+            @RequestBody @Valid AlunoPostPutRequestDTO alunoPostPutRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(alunoAlterarService.alterar(id, alunoPostPutRequestDTO));
     }
 }
