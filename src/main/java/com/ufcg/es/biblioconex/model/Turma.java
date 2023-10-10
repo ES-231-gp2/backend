@@ -17,7 +17,6 @@ public class Turma {
     @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @JsonProperty("nome")
@@ -26,6 +25,5 @@ public class Turma {
 
     @JsonProperty("alunos")
     @OneToMany(mappedBy = "turma", orphanRemoval = true)
-    @ToString.Exclude
     private Set<Aluno> alunos;
 }
