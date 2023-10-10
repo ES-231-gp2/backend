@@ -20,6 +20,10 @@ public class Turma {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @JsonProperty("nome")
+    @Column(name = "nome", nullable = false)
+    private String nome;
+
     @JsonProperty("alunos")
     @OneToMany(mappedBy = "turma", orphanRemoval = true)
     @ToString.Exclude
