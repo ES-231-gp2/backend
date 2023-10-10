@@ -13,14 +13,14 @@ public class AlunoPostPutRequestDTO {
 
     @JsonProperty("nome")
     @NotBlank(message = "O nome nao pode ser vazio")
-    String nome;
+    private String nome;
 
     @JsonProperty("email")
     @NotBlank(message = "Email nao pode ser vazio")
     @Email(message = "Email invalido")
-    String email;
+    private String email;
 
     @JsonProperty("turma")
     @NotNull(message = "Turma nao pode ser vazia")
-    Turma turma;
+    private Turma turma;
 }
