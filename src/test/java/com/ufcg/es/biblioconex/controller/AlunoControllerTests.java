@@ -92,7 +92,7 @@ public class AlunoControllerTests {
             assertAll(
                     () -> assertEquals(1, alunoRepository.count()),
                     () -> assertEquals(alunoPostPutRequestDTO.getNome(), resultado.getNome()),
-                    () -> assertEquals(alunoPostPutRequestDTO.getTurma(), resultado.getTurma()),
+                    () -> assertEquals(alunoPostPutRequestDTO.getTurma().getNome(), resultado.getTurma().getNome()),
                     () -> assertEquals(alunoPostPutRequestDTO.getEmail(), resultado.getEmail())
             );
 
