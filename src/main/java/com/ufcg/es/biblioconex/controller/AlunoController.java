@@ -1,6 +1,6 @@
 package com.ufcg.es.biblioconex.controller;
 
-import com.ufcg.es.biblioconex.dto.AlunoDTO;
+import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
 import com.ufcg.es.biblioconex.service.aluno.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,9 @@ public class AlunoController {
 
     @PostMapping()
     public ResponseEntity<?> criarAluno(
-            @RequestBody @Valid AlunoDTO alunoDTO) {
+            @RequestBody @Valid AlunoPostPutRequestDTO alunoPostPutRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(alunoCriarService.criar(alunoDTO));
+                .body(alunoCriarService.criar(alunoPostPutRequestDTO));
     }
 }

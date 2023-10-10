@@ -1,6 +1,6 @@
 package com.ufcg.es.biblioconex.service.aluno;
 
-import com.ufcg.es.biblioconex.dto.AlunoDTO;
+import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
 import com.ufcg.es.biblioconex.model.Aluno;
 import com.ufcg.es.biblioconex.model.Turma;
 import com.ufcg.es.biblioconex.repository.AlunoRepository;
@@ -32,7 +32,7 @@ class AlunoCriarServiceTests {
 
     Aluno aluno;
 
-    AlunoDTO alunoDTO;
+    AlunoPostPutRequestDTO alunoPostPutRequestDTO;
 
     Turma turma;
 
@@ -44,7 +44,7 @@ class AlunoCriarServiceTests {
                 .turma(turma)
                 .email("alunoponto@gmail.com")
                 .build();
-       alunoDTO = AlunoDTO.builder()
+       alunoPostPutRequestDTO = AlunoPostPutRequestDTO.builder()
                 .nome("Aluno Ponto da Silva")
                 .turma(turma)
                 .email("alunoponto@gmail.com")
@@ -63,7 +63,7 @@ class AlunoCriarServiceTests {
         // nenhuma necessidade além do setup()
 
         // Act
-        Aluno resultado = driver.criar(alunoDTO);
+        Aluno resultado = driver.criar(alunoPostPutRequestDTO);
 
         // Assert
         assertAll(
@@ -81,7 +81,7 @@ class AlunoCriarServiceTests {
         alunoRepository.save(aluno);
 
         // Act
-        Aluno resultado = driver.criar(alunoDTO);
+        Aluno resultado = driver.criar(alunoPostPutRequestDTO);
 
         // Assert
         assertAll(

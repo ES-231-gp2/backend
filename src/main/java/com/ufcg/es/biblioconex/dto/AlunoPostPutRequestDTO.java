@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlunoDTO {
+public class AlunoPostPutRequestDTO {
 
     @JsonProperty("nome")
     @NotBlank(message = "O nome nao pode ser vazio")

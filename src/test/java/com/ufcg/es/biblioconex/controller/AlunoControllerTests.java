@@ -2,7 +2,7 @@ package com.ufcg.es.biblioconex.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ufcg.es.biblioconex.dto.AlunoDTO;
+import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
 import com.ufcg.es.biblioconex.exception.CustomErrorType;
 import com.ufcg.es.biblioconex.model.Aluno;
 import com.ufcg.es.biblioconex.model.Turma;
@@ -38,7 +38,7 @@ public class AlunoControllerTests {
 
     Aluno aluno;
 
-    AlunoDTO alunoDTO;
+    AlunoPostPutRequestDTO alunoPostPutRequestDTO;
 
     Turma turma;
 
@@ -55,7 +55,7 @@ public class AlunoControllerTests {
                 .turma(turma)
                 .email("alunoponto@gmail.com")
                 .build();
-        alunoDTO = AlunoDTO.builder()
+        alunoPostPutRequestDTO = AlunoPostPutRequestDTO.builder()
                 .nome("Aluno Ponto da Silva")
                 .turma(turma)
                 .email("alunoponto@gmail.com")
@@ -75,7 +75,7 @@ public class AlunoControllerTests {
 
         String responseJsonString = driver.perform(post(URI_ALUNOS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(alunoDTO)))
+                        .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
@@ -84,9 +84,9 @@ public class AlunoControllerTests {
 
         assertAll(
                 () -> assertEquals(1, alunoRepository.count()),
-                () -> assertEquals(alunoDTO.getNome(), resultado.getNome()),
-                () -> assertEquals(alunoDTO.getTurma(), resultado.getTurma()),
-                () -> assertEquals(alunoDTO.getEmail(), resultado.getEmail())
+                () -> assertEquals(alunoPostPutRequestDTO.getNome(), resultado.getNome()),
+                () -> assertEquals(alunoPostPutRequestDTO.getTurma(), resultado.getTurma()),
+                () -> assertEquals(alunoPostPutRequestDTO.getEmail(), resultado.getEmail())
         );
 
     }
@@ -96,11 +96,11 @@ public class AlunoControllerTests {
     @DisplayName("Quando tento criar um aluno com nome inválido")
     void test02() throws Exception {
 
-        alunoDTO.setNome("");
+        alunoPostPutRequestDTO.setNome("");
 
         String responseJsonString = driver.perform(post(URI_ALUNOS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(alunoDTO)))
+                        .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
@@ -116,11 +116,11 @@ public class AlunoControllerTests {
     @DisplayName("Quando tento criar um aluno com turma inválida")
     void test03() throws Exception {
 
-        alunoDTO.setTurma(null);
+        alunoPostPutRequestDTO.setTurma(null);
 
         String responseJsonString = driver.perform(post(URI_ALUNOS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(alunoDTO)))
+                        .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
@@ -136,11 +136,11 @@ public class AlunoControllerTests {
     @DisplayName("Quando tento criar um aluno com email inválido")
     void test04() throws Exception {
 
-        alunoDTO.setEmail("emailinvalido");
+        alunoPostPutRequestDTO.setEmail("emailinvalido");
 
         String responseJsonString = driver.perform(post(URI_ALUNOS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(alunoDTO)))
+                        .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
@@ -156,11 +156,11 @@ public class AlunoControllerTests {
     @DisplayName("Quando tento criar um aluno com email vazio")
     void test05() throws Exception {
 
-        alunoDTO.setEmail("");
+        alunoPostPutRequestDTO.setEmail("");
 
         String responseJsonString = driver.perform(post(URI_ALUNOS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(alunoDTO)))
+                        .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
