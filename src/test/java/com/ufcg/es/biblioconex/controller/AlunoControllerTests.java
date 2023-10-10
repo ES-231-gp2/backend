@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,6 +72,7 @@ public class AlunoControllerTests {
     }
 
 
+
     @Nested
     @DisplayName("Testes do método POST")
     class AlunoPost {
@@ -92,7 +94,7 @@ public class AlunoControllerTests {
             assertAll(
                     () -> assertEquals(1, alunoRepository.count()),
                     () -> assertEquals(alunoPostPutRequestDTO.getNome(), resultado.getNome()),
-                    () -> assertEquals(alunoPostPutRequestDTO.getTurma(), resultado.getTurma()),
+                    () -> assertEquals(alunoPostPutRequestDTO.getTurma().getNome(), resultado.getTurma().getNome()),
                     () -> assertEquals(alunoPostPutRequestDTO.getEmail(), resultado.getEmail())
             );
 
@@ -194,6 +196,131 @@ public class AlunoControllerTests {
             CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
             //Assert
             assertEquals("Aluno ja existe!", error.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes do método PUT")
+    class AlunoPut {
+        @Test
+        @DisplayName("Quando altero um aluno com dados válidos")
+        void test01() throws Exception {
+            //Act
+            alunoPostPutRequestDTO.setNome("Aluno Ponto da Silva 2");
+            alunoPostPutRequestDTO.setEmail("aluno2@gmail.com");
+            Turma turma2 = turmaRepository.save(Turma.builder().nome("Turma 2").build());
+            alunoPostPutRequestDTO.setTurma(turma2);
+            //Arrange
+            String responseJsonString = driver.perform(put(URI_ALUNOS + "/" + aluno.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            Aluno resultado = objectMapper.readValue(responseJsonString, Aluno.AlunoBuilder.class).build();
+
+            // Assert
+            assertAll(
+                    () -> assertEquals(1, alunoRepository.count()),
+                    () -> assertEquals(alunoPostPutRequestDTO.getNome(), resultado.getNome()),
+                    () -> assertEquals(alunoPostPutRequestDTO.getTurma().getNome(), resultado.getTurma().getNome()),
+                    () -> assertEquals(alunoPostPutRequestDTO.getEmail(), resultado.getEmail())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando tento alterar um aluno que não existe")
+        void test02() throws Exception {
+            //Act
+            alunoRepository.deleteAll();
+            //Arrange
+            String responseJsonString = driver.perform(put(URI_ALUNOS + "/" + aluno.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
+            //Assert
+            assertEquals("O aluno consultado nao existe!", error.getMessage());
+        }
+
+        @Test
+        @DisplayName("Quando tento alterar um aluno com nome inválido")
+        void test03() throws Exception {
+            //Act
+            alunoPostPutRequestDTO.setNome("");
+            //Arrange
+            String responseJsonString = driver.perform(put(URI_ALUNOS + "/" + aluno.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
+            //Assert
+            assertEquals("Erros de validacao encontrados", error.getMessage());
+            assertTrue(error.getErrors().contains("O nome nao pode ser vazio"));
+        }
+
+        @Test
+        @DisplayName("Quando tento alterar um aluno com turma inválida")
+        void test04() throws Exception {
+            //Act
+            alunoPostPutRequestDTO.setTurma(null);
+            //Arrange
+            String responseJsonString = driver.perform(put(URI_ALUNOS + "/" + aluno.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
+            //Assert
+            assertEquals("Erros de validacao encontrados", error.getMessage());
+            assertTrue(error.getErrors().contains("Turma nao pode ser vazia"));
+        }
+
+        @Test
+        @DisplayName("Quando tento alterar um aluno com email inválido")
+        void test05() throws Exception {
+            //Act
+            alunoPostPutRequestDTO.setEmail("emailinvalido");
+            //Arrange
+            String responseJsonString = driver.perform(put(URI_ALUNOS + "/" + aluno.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
+            //Assert
+            assertEquals("Erros de validacao encontrados", error.getMessage());
+            assertTrue(error.getErrors().contains("Email invalido"));
+        }
+
+        @Test
+        @DisplayName("Quando tento alterar um aluno com email vazio")
+        void test06() throws Exception {
+            //Act
+            alunoPostPutRequestDTO.setEmail("");
+            //Arrange
+            String responseJsonString = driver.perform(put(URI_ALUNOS + "/" + aluno.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(alunoPostPutRequestDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CustomErrorType error = objectMapper.readValue(responseJsonString, CustomErrorType.class);
+            //Assert
+            assertEquals("Erros de validacao encontrados", error.getMessage());
+            assertTrue(error.getErrors().contains("Email nao pode ser vazio"));
         }
     }
 }
