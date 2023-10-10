@@ -8,19 +8,19 @@ import java.util.Set;
 
 @Entity
 @Data
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "turmas")
 public class Turma {
+
     @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @JsonProperty("nome")
-    @Column(name = "nome", nullable = false)
+    @Column(nullable = false)
     private String nome;
 
     @JsonProperty("alunos")
