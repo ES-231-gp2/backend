@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,7 +41,7 @@ class LivroControllerTests {
         livroDTO = LivroDTO.builder()
                 .isbn("978-85-8057-301-5")
                 .titulo("Extraordinário")
-                .autores(List.of("R. J. Palacio"))
+                .autores(Set.of("R. J. Palacio"))
                 .editora("Intrínseca")
                 .ano("2013")
                 .paginas("320")

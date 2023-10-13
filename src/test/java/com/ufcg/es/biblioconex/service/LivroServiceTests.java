@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +29,7 @@ class LivroServiceTests {
         livroDTO = LivroDTO.builder()
                 .isbn("85-325-2066-9")
                 .titulo("O conto da aia")
-                .autores(List.of("Margaret Atwood"))
+                .autores(Set.of("Margaret Atwood"))
                 .editora("Editora Rocco")
                 .ano("2017")
                 .paginas("368")
@@ -46,7 +46,7 @@ class LivroServiceTests {
     @Test
     @DisplayName("Cadastrar um primeiro livro")
     void cadastrarLivro01() {
-        Livro livro = livroService.cadastrarLivro(livroDTO);
+        Livro livro = livroService.cadastrarLivro(livroDTO, 1);
 
         assertAll(
                 () -> assertEquals(1, livroRepository.count()),
@@ -61,14 +61,14 @@ class LivroServiceTests {
         LivroDTO segundoLivroDTO = LivroDTO.builder()
                 .isbn("978-85-8057-301-5")
                 .titulo("Extraordinário")
-                .autores(List.of("R. J. Palacio"))
+                .autores(Set.of("R. J. Palacio"))
                 .editora("Intrínseca")
                 .ano("2013")
                 .paginas("320")
                 .build();
 
-        Livro primeiroLivro = livroService.cadastrarLivro(livroDTO);
-        Livro segundoLivro = livroService.cadastrarLivro(segundoLivroDTO);
+        Livro primeiroLivro = livroService.cadastrarLivro(livroDTO, 1);
+        Livro segundoLivro = livroService.cadastrarLivro(segundoLivroDTO, 2);
 
         assertAll(
                 () -> assertEquals(2, livroRepository.count()),
