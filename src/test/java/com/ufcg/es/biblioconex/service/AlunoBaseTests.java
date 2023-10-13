@@ -1,4 +1,4 @@
-package com.ufcg.es.biblioconex.service.aluno;
+package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
 import com.ufcg.es.biblioconex.model.Aluno;
@@ -20,6 +20,9 @@ public class AlunoBaseTests {
 
     @Autowired
     TurmaRepository turmaRepository;
+
+    @Autowired
+    AlunoService driver;
 
     Aluno aluno;
 

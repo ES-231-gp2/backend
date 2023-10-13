@@ -1,7 +1,8 @@
-package com.ufcg.es.biblioconex.service.aluno;
+package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
 import com.ufcg.es.biblioconex.exception.AlunoJaExisteException;
+import com.ufcg.es.biblioconex.exception.AlunoNaoExisteException;
 import com.ufcg.es.biblioconex.repository.AlunoRepository;
 import com.ufcg.es.biblioconex.model.Aluno;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 @Service
-public class AlunoCriarServiceImpl implements AlunoCriarService {
+public class AlunoServiceImpl implements AlunoService {
 
     @Autowired
     AlunoRepository alunoRepository;
@@ -24,6 +25,14 @@ public class AlunoCriarServiceImpl implements AlunoCriarService {
             }
         });
         Aluno aluno = modelMapper.map(alunoPostPutRequestDTO, Aluno.class);
+        return alunoRepository.save(aluno);
+    }
+
+    @Override
+    public Aluno alterar(Long id, AlunoPostPutRequestDTO alunoPostPutRequestDTO) {
+        Aluno aluno = alunoRepository.findById(id).orElseThrow(AlunoNaoExisteException::new);
+
+        modelMapper.map(alunoPostPutRequestDTO, aluno);
         return alunoRepository.save(aluno);
     }
 }

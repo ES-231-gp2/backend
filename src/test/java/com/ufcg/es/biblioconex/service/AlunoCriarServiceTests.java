@@ -1,4 +1,4 @@
-package com.ufcg.es.biblioconex.service.aluno;
+package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.model.Aluno;
 import jakarta.transaction.Transactional;
@@ -14,9 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 @DisplayName("Testes do Serviço de criação de aluno")
 class AlunoCriarServiceTests extends AlunoBaseTests {
-
-    @Autowired
-    AlunoCriarService driver;
 
     @Test
     @DisplayName("Quando criamos um aluno primeiro")

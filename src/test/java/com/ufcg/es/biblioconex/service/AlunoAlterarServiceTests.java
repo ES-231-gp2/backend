@@ -1,11 +1,10 @@
-package com.ufcg.es.biblioconex.service.aluno;
+package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.exception.AlunoNaoExisteException;
 import com.ufcg.es.biblioconex.model.Aluno;
 import com.ufcg.es.biblioconex.model.Turma;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,9 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @DisplayName("Testes do Serviço de alteração de aluno")
 public class AlunoAlterarServiceTests extends AlunoBaseTests {
-
-    @Autowired
-    AlunoAlterarService driver;
 
     @Test
     @DisplayName("Quando alteramos o nome de um aluno")

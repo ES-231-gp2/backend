@@ -1,9 +1,10 @@
-package com.ufcg.es.biblioconex.service.aluno;
+package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
 import com.ufcg.es.biblioconex.model.Aluno;
 
-@FunctionalInterface
-public interface AlunoAlterarService {
+public interface AlunoService {
+
+    Aluno criar(AlunoPostPutRequestDTO alunoPostPutRequestDto);
     Aluno alterar(Long id, AlunoPostPutRequestDTO alunoPostPutRequestDTO);
 }

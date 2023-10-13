@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Testes do controlador de Alunos")
 public class AlunoControllerTests {
 
-    final String URI_ALUNOS = "/v1/alunos";
+    final String URI_ALUNOS = "/api/alunos";
 
     @Autowired
     MockMvc driver;

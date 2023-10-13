@@ -1,7 +1,7 @@
 package com.ufcg.es.biblioconex.controller;
 
 import com.ufcg.es.biblioconex.dto.AlunoPostPutRequestDTO;
-import com.ufcg.es.biblioconex.service.aluno.*;
+import com.ufcg.es.biblioconex.service.AlunoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class AlunoController {
 
     @Autowired
-    AlunoCriarService alunoCriarService;
-    @Autowired
-    AlunoAlterarService alunoAlterarService;
+    AlunoService alunoCriarService;
+
 
     @PostMapping()
     public ResponseEntity<?> criarAluno(
