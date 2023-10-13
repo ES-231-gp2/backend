@@ -23,7 +23,6 @@ public class Turma {
     @Column(nullable = false)
     private String nome;
 
-    @JsonProperty("alunos")
-    @OneToMany(mappedBy = "turma", orphanRemoval = true)
-    private Set<Aluno> alunos;
+    @ElementCollection
+    private Set<Long> alunos;
 }

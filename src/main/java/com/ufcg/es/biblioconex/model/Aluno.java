@@ -22,7 +22,7 @@ public class Aluno { // Extends User
     private String nome;
 
     @JsonProperty("email")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @JsonProperty("turma")

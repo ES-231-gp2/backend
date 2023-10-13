@@ -16,15 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class AlunoController {
 
     @Autowired
-    AlunoService service;
-
+    AlunoService alunoService;
 
     @PostMapping()
     public ResponseEntity<?> criarAluno(
             @RequestBody @Valid AlunoPostPutRequestDTO alunoPostPutRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(service.criar(alunoPostPutRequestDTO));
+                .body(alunoService.criar(alunoPostPutRequestDTO));
     }
 
     @PutMapping("/{id}")
@@ -33,6 +32,6 @@ public class AlunoController {
             @RequestBody @Valid AlunoPostPutRequestDTO alunoPostPutRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.alterar(id, alunoPostPutRequestDTO));
+                .body(alunoService.alterar(id, alunoPostPutRequestDTO));
     }
 }
