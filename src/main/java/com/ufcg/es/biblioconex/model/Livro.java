@@ -7,8 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
@@ -34,7 +35,7 @@ public class Livro {
     @JsonProperty("autores")
     @ElementCollection
     @Column(nullable = false)
-    private List<String> autores = new ArrayList<>();
+    private Set<String> autores = new LinkedHashSet<>();
 
     @JsonProperty("editora")
     @Column(nullable = false)
@@ -56,4 +57,22 @@ public class Livro {
 
     @JsonProperty("capa")
     private String capa;
+
+    @JsonProperty("exemplares")
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Exemplar> exemplares = new LinkedHashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Livro livro = (Livro) o;
+        return Objects.equals(isbn, livro.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
+    }
 }

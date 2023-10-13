@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LivroService {
 
-    Livro cadastrarLivro(LivroDTO livroDTO);
+    Livro cadastrarLivro(LivroDTO livroDTO, Integer numeroExemplares);
 
     LivroDTO buscarLivroPorIsbn(String isbn);
 
@@ -16,4 +16,6 @@ public interface LivroService {
     Livro atualizarLivro(Long id, LivroDTO DTO);
 
     void removerLivro(Long id);
+
+    Livro adicionarExemplares(Long id, Integer numeroExemplares);
 }

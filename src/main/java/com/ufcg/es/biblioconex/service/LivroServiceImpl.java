@@ -1,16 +1,21 @@
 package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.LivroDTO;
+import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
+import com.ufcg.es.biblioconex.model.Exemplar;
 import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.repository.LivroRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
+
+import static com.ufcg.es.biblioconex.utils.Formatador.formatarIsbn;
+import static com.ufcg.es.biblioconex.utils.HttpClient.getHttpResponse;
 
 @Service
 public class LivroServiceImpl implements LivroService {
@@ -25,15 +30,26 @@ public class LivroServiceImpl implements LivroService {
     private String KEY;
 
     @Override
-    public Livro cadastrarLivro(LivroDTO livroDTO) {
+    public Livro cadastrarLivro(LivroDTO livroDTO, Integer numeroExemplares) {
+        livroDTO.setIsbn(formatarIsbn(livroDTO.getIsbn()));
         Livro livro = modelMapper.map(livroDTO, Livro.class);
-        livro.setIsbn(formataIsbn(livroDTO.getIsbn()));
+        livroRepository.save(livro);
+
+        Set<Exemplar> exemplares = livro.getExemplares();
+        for (int i = 1; i < numeroExemplares + 1; i++) {
+            exemplares.add(Exemplar.builder()
+                    .livro(livro)
+                    .numero(i)
+                    .build());
+        }
+        livro.setExemplares(exemplares);
+
         return livroRepository.save(livro);
     }
 
     @Override
     public LivroDTO buscarLivroPorIsbn(String isbn) {
-        isbn = formataIsbn(isbn);
+        isbn = formatarIsbn(isbn);
         String params = "?q=ISBN:" + isbn + "&orderBy=relevance&maxResults=1";
         String url = URL + params + "&key=" + KEY;
 
@@ -43,7 +59,7 @@ public class LivroServiceImpl implements LivroService {
     @Override
     public List<Livro> buscarLivros(Long id) {
         if (id != null && id > 0) {
-            Livro livro = livroRepository.findById(id).orElseThrow(NoSuchElementException::new);
+            Livro livro = livroRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
             return List.of(livro);
         }
 
@@ -62,31 +78,20 @@ public class LivroServiceImpl implements LivroService {
         livroRepository.deleteById(id);
     }
 
-    private String formataIsbn(String isbn) {
-        if (isbn == null || isbn.isEmpty()) {
-            return "";
+    @Override
+    public Livro adicionarExemplares(Long id, Integer numeroExemplares) {
+        Livro livro = livroRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
+        Set<Exemplar> exemplares = livro.getExemplares();
+
+        int ultimoExemplar = exemplares.size();
+        for (int i = ultimoExemplar + 1; i < ultimoExemplar + numeroExemplares + 1; i++) {
+            exemplares.add(Exemplar.builder()
+                    .livro(livro)
+                    .numero(i)
+                    .build());
         }
 
-        String cleanIsbn = isbn.replaceAll("[^0-9]", "");
-
-        if (cleanIsbn.length() == 10) {
-            isbn = cleanIsbn.substring(0, 2) + "-" +
-                    cleanIsbn.substring(2, 5) + "-" +
-                    cleanIsbn.substring(5, 9) + "-" +
-                    cleanIsbn.charAt(9);
-        } else if (cleanIsbn.length() == 13) {
-            isbn = cleanIsbn.substring(0, 3) + "-" +
-                    cleanIsbn.substring(3, 5) + "-" +
-                    cleanIsbn.substring(5, 9) + "-" +
-                    cleanIsbn.substring(9, 12) + "-" +
-                    cleanIsbn.charAt(12);
-        }
-
-        return isbn;
-    }
-
-    private String getHttpResponse(String url) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, String.class);
+        livro.setExemplares(exemplares);
+        return livroRepository.save(livro);
     }
 }

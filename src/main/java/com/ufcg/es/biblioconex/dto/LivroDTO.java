@@ -13,8 +13,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -34,7 +34,7 @@ public class LivroDTO {
     @JsonProperty("autores")
     @Builder.Default
     @Size.List(@Size(min = 1, message = "Deve haver pelo menos um autor"))
-    private List<String> autores = new ArrayList<>();
+    private Set<String> autores = new HashSet<>();
 
     @JsonProperty("editora")
     @NotBlank(message = "A editora não pode ser vazia")
