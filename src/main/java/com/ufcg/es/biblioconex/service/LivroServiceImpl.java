@@ -62,6 +62,25 @@ public class LivroServiceImpl implements LivroService {
         livroRepository.deleteById(id);
     }
 
+    @Override
+    public Livro[] atualizarLivroDoMes(Long id) {
+        List<Livro> livros = livroRepository.findAll();
+        Livro livroDoMes = null;
+
+        for (Livro livro : livros) {
+            if (livro.isLivroDoMes()) {
+                livro.setLivroDoMes(false);
+                livroDoMes = livro;
+                livroRepository.save(livro);
+            }
+        }
+
+        Livro livro = livroRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        livro.setLivroDoMes(true);
+
+        return new Livro[]{livroDoMes, livroRepository.save(livro)};
+    }
+
     private String formataIsbn(String isbn) {
         if (isbn == null || isbn.isEmpty()) {
             return "";

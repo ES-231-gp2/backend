@@ -56,4 +56,8 @@ public class Livro {
 
     @JsonProperty("capa")
     private String capa;
+
+    @JsonProperty("livroDoMes")
+    @Column(nullable = false)
+    private boolean livroDoMes = false;
 }

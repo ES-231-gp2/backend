@@ -16,4 +16,6 @@ public interface LivroService {
     Livro atualizarLivro(Long id, LivroDTO DTO);
 
     void removerLivro(Long id);
+
+    Livro[] atualizarLivroDoMes(Long id);
 }
