@@ -81,6 +81,20 @@ public class LivroServiceImpl implements LivroService {
         return new Livro[]{livroDoMes, livroRepository.save(livro)};
     }
 
+    @Override
+    public Livro verLivroDoMes() {
+        List<Livro> livros = livroRepository.findAll();
+        Livro livroDoMes = null;
+
+        for (Livro livro : livros) {
+            if (livro.isLivroDoMes()) {
+                livroDoMes = livro;
+            }
+        }
+
+        return livroDoMes;
+    }
+
     private String formataIsbn(String isbn) {
         if (isbn == null || isbn.isEmpty()) {
             return "";

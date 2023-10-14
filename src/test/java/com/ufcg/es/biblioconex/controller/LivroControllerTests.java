@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -123,8 +122,6 @@ class LivroControllerTests {
         @Test
         @DisplayName("Atualizar primeiro livro do mês")
         void atualizarPrimeiroLivroDoMes() throws Exception {
-
-
             String responseJsonString = driver.perform(put(URI_LIVROS + "/livro-do-mes/" + livro.getId())
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -163,5 +160,41 @@ class LivroControllerTests {
                     () -> assertEquals(livro2.getId(), resultado2[1].getId())
             );
         }
+
+        @Test
+        @DisplayName("Ver livro do mês")
+        void verLivroDoMes() throws Exception {
+            driver.perform(put(URI_LIVROS + "/livro-do-mes/" + livro.getId())
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            String responseJsonString = driver.perform(get(URI_LIVROS + "/livro-do-mes")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            Livro livro = objectMapper.readValue(responseJsonString, Livro.class);
+
+            assertAll(
+                    () -> assertTrue(livro.isLivroDoMes()),
+                    () -> assertEquals(livro.getId(), livro.getId())
+            );
+        }
+
+        @Test
+        @DisplayName("Ver livro do mês sem livro do mês")
+        void verLivroDoMesNulo() throws Exception {
+            String responseJsonString = driver.perform(get(URI_LIVROS + "/livro-do-mes")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            assertTrue(responseJsonString == null || responseJsonString.isEmpty());
+        }
+
     }
 }

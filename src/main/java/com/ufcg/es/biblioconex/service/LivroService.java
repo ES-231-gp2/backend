@@ -18,4 +18,6 @@ public interface LivroService {
     void removerLivro(Long id);
 
     Livro[] atualizarLivroDoMes(Long id);
+
+    Livro verLivroDoMes();
 }
