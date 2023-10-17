@@ -24,7 +24,7 @@ public class LivroDTO {
 
     @JsonProperty("isbn")
     @NotBlank(message = "O ISBN não pode ser vazio")
-    @ISBN(message = "O ISBN deve ser válido")
+    @ISBN(type = ISBN.Type.ANY, message = "O ISBN deve ser válido")
     private String isbn;
 
     @JsonProperty("titulo")
