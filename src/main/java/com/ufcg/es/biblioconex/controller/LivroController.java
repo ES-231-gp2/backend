@@ -34,4 +34,12 @@ public class LivroController {
                 .status(HttpStatus.OK)
                 .body(livroService.buscarLivroPorIsbn(isbn));
     }
+
+    @PutMapping("/livro-do-mes/{id}")
+    public ResponseEntity<?> atualizarLivroDoMes(
+            @PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.atualizarLivroDoMes(id));
+    }
 }

@@ -24,6 +24,8 @@ class LivroServiceTests {
     LivroRepository livroRepository;
     LivroDTO livroDTO;
 
+    LivroDTO livroDTO2;
+
     @BeforeEach
     void setup() {
         livroDTO = LivroDTO.builder()
@@ -86,6 +88,43 @@ class LivroServiceTests {
 
         assertAll(
                 () -> assertEquals(livroDTO, livroApi)
+        );
+    }
+
+    @Test
+    @DisplayName("Adicionar livro como primeiro livro do mês")
+    void adicionaLivroDoMes(){
+        Livro livro = livroService.cadastrarLivro(livroDTO);
+
+        Livro[] livros = livroService.atualizarLivroDoMes(livro.getId());
+
+        assertAll(
+            ()-> assertEquals(livro.getId(), livros[1].getId()),
+            ()-> assertNull(livros[0])
+        );
+    }
+
+    @Test
+    @DisplayName("Adicionar livro como segundo livro do mês")
+    void adicionaSegundoLivroDoMes(){
+        LivroDTO segundoLivroDTO = LivroDTO.builder()
+                .isbn("978-85-8057-301-5")
+                .titulo("Extraordinário")
+                .autores(List.of("R. J. Palacio"))
+                .editora("Intrínseca")
+                .ano("2013")
+                .paginas("320")
+                .build();
+
+        Livro primeiroLivro = livroService.cadastrarLivro(livroDTO);
+        Livro segundoLivro = livroService.cadastrarLivro(segundoLivroDTO);
+
+        livroService.atualizarLivroDoMes(primeiroLivro.getId());
+        Livro[] livros = livroService.atualizarLivroDoMes(segundoLivro.getId());
+
+        assertAll(
+                ()-> assertEquals(primeiroLivro.getId(), livros[0].getId()),
+                ()-> assertEquals(segundoLivro.getId(), livros[1].getId())
         );
     }
 }
