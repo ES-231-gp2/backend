@@ -48,22 +48,27 @@ public class LivroServiceImpl implements LivroService {
     }
 
     @Override
-    public LivroDTO buscarLivroPorIsbn(String isbn) {
-        isbn = formatarIsbn(isbn);
-        String params = "?q=ISBN:" + isbn + "&orderBy=relevance&maxResults=1";
-        String url = URL + params + "&key=" + KEY;
-
-        return LivroDTO.fromJson(isbn, getHttpResponse(url));
-    }
-
-    @Override
     public List<Livro> buscarLivros(Long id) {
         if (id != null && id > 0) {
             Livro livro = livroRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
             return List.of(livro);
         }
 
-        return livroRepository.findAll();
+        return livroRepository.findByOrderByTituloAsc();
+    }
+
+    @Override
+    public List<Livro> buscarLivrosPorGenero(Set<String> generos) {
+        return livroRepository.findByGenerosInOrderByTituloAsc(generos);
+    }
+
+    @Override
+    public LivroDTO buscarLivroPorIsbn(String isbn) {
+        isbn = formatarIsbn(isbn);
+        String params = "?q=ISBN:" + isbn + "&orderBy=relevance&maxResults=1";
+        String url = URL + params + "&key=" + KEY;
+
+        return LivroDTO.fromJson(isbn, getHttpResponse(url));
     }
 
     @Override
@@ -97,34 +102,19 @@ public class LivroServiceImpl implements LivroService {
 
     @Override
     public Livro[] atualizarLivroDoMes(Long id) {
-        List<Livro> livros = livroRepository.findAll();
-        Livro livroDoMes = null;
-
-        for (Livro livro : livros) {
-            if (livro.isLivroDoMes()) {
-                livro.setLivroDoMes(false);
-                livroDoMes = livro;
-                livroRepository.save(livro);
-            }
-        }
-
-        Livro livro = livroRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Livro livro = livroRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
         livro.setLivroDoMes(true);
+
+        Livro livroDoMes = livroRepository.findFirstByLivroDoMesTrue();
+        if (livroDoMes != null) {
+            livroDoMes.setLivroDoMes(false);
+        }
 
         return new Livro[]{livroDoMes, livroRepository.save(livro)};
     }
 
     @Override
     public Livro verLivroDoMes() {
-        List<Livro> livros = livroRepository.findAll();
-        Livro livroDoMes = null;
-
-        for (Livro livro : livros) {
-            if (livro.isLivroDoMes()) {
-                livroDoMes = livro;
-            }
-        }
-
-        return livroDoMes;
+        return livroRepository.findFirstByLivroDoMesTrue();
     }
 }

@@ -58,6 +58,11 @@ public class Livro {
     @Lob
     private String descricao;
 
+    @JsonProperty("generos")
+    @ElementCollection
+    @Builder.Default
+    private Set<String> generos = new LinkedHashSet<>();
+
     @JsonProperty("capa")
     private String capa;
 
@@ -69,7 +74,7 @@ public class Livro {
     @JsonProperty("livroDoMes")
     @Column(nullable = false)
     @Builder.Default
-    private boolean livroDoMes = false;
+    private Boolean livroDoMes = false;
 
     @Override
     public boolean equals(Object o) {

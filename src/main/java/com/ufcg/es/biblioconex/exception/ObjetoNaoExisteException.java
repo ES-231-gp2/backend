@@ -3,6 +3,6 @@ package com.ufcg.es.biblioconex.exception;
 public class ObjetoNaoExisteException extends BiblioConexException {
 
     public ObjetoNaoExisteException() {
-        super("O objeto consultado nao existe!");
+        super("O objeto consultado não existe!");
     }
 }

@@ -131,7 +131,7 @@ class LivroControllerTests {
 
             assertAll(
                     () -> assertNull(resultado[0]),
-                    () -> assertTrue(resultado[1].isLivroDoMes()),
+                    () -> assertTrue(resultado[1].getLivroDoMes()),
                     () -> assertEquals(livro.getId(), resultado[1].getId())
             );
         }
@@ -155,7 +155,7 @@ class LivroControllerTests {
 
             assertAll(
                     () -> assertEquals(livro.getId(), resultado2[0].getId()),
-                    () -> assertTrue(resultado2[1].isLivroDoMes()),
+                    () -> assertTrue(resultado2[1].getLivroDoMes()),
                     () -> assertEquals(livro2.getId(), resultado2[1].getId())
             );
         }
@@ -175,11 +175,11 @@ class LivroControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            Livro livro = objectMapper.readValue(responseJsonString, Livro.class);
+            Livro resultado = objectMapper.readValue(responseJsonString, Livro.class);
 
             assertAll(
-                    () -> assertTrue(livro.isLivroDoMes()),
-                    () -> assertEquals(livro.getId(), livro.getId())
+                    () -> assertTrue(resultado.getLivroDoMes()),
+                    () -> assertEquals(livro.getId(), resultado.getId())
             );
         }
 
@@ -192,7 +192,7 @@ class LivroControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            assertTrue(responseJsonString == null || responseJsonString.isEmpty());
+            assertTrue(responseJsonString.isEmpty());
         }
 
     }

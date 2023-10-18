@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.ISBN;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -34,7 +34,7 @@ public class LivroDTO {
     @JsonProperty("autores")
     @Builder.Default
     @Size.List(@Size(min = 1, message = "Deve haver pelo menos um autor"))
-    private Set<String> autores = new HashSet<>();
+    private Set<String> autores = new LinkedHashSet<>();
 
     @JsonProperty("editora")
     @NotBlank(message = "A editora não pode ser vazia")
@@ -52,6 +52,10 @@ public class LivroDTO {
 
     @JsonProperty("descricao")
     private String descricao;
+
+    @JsonProperty("generos")
+    @Builder.Default
+    private Set<String> generos = new LinkedHashSet<>();
 
     @JsonProperty("capa")
     private String capa;
@@ -75,8 +79,11 @@ public class LivroDTO {
             if (volumeInfoNode.has("title")) {
                 livro.setTitulo(volumeInfoNode.get("title").asText());
             }
-            if (volumeInfoNode.has("title")) {
-                livro.setTitulo(volumeInfoNode.get("title").asText());
+            if (volumeInfoNode.has("authors")) {
+                ArrayNode autoresNode = (ArrayNode) volumeInfoNode.get("authors");
+                for (JsonNode autorNode : autoresNode) {
+                    livro.getAutores().add(autorNode.asText());
+                }
             }
             if (volumeInfoNode.has("publisher")) {
                 livro.setEditora(volumeInfoNode.get("publisher").asText());
@@ -90,15 +97,17 @@ public class LivroDTO {
             if (volumeInfoNode.has("description")) {
                 livro.setDescricao(volumeInfoNode.get("description").asText());
             }
+            if (volumeInfoNode.has("categories")) {
+                ArrayNode generosNode = (ArrayNode) volumeInfoNode.get("categories");
+                for (JsonNode generoNode : generosNode) {
+                    livro.getGeneros().add(generoNode.asText());
+                }
+            }
             if (volumeInfoNode.has("imageLinks")) {
                 livro.setCapa(volumeInfoNode.get("imageLinks").get("thumbnail").asText().replace("&edge=curl", ""));
             }
-
-            ArrayNode autoresNode = (ArrayNode) volumeInfoNode.get("authors");
-            for (JsonNode autorNode : autoresNode) {
-                livro.getAutores().add(autorNode.asText());
-            }
         }
+
         return livro;
     }
 }

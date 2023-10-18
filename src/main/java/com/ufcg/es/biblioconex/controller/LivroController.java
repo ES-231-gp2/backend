@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping(
         value = "/api/livros",
@@ -28,19 +30,27 @@ public class LivroController {
                 .body(livroService.cadastrarLivro(livroDTO, numeroExemplares));
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> buscarLivros() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.buscarLivros(null));
+    }
+
+    @GetMapping("/generos")
+    public ResponseEntity<?> buscarLivrosPorGenero(
+            @RequestParam Set<String> generos) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.buscarLivrosPorGenero(generos));
+    }
+
     @GetMapping("/isbn/{isbn}")
     public ResponseEntity<?> buscarLivroPorIsbn(
             @PathVariable String isbn) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(livroService.buscarLivroPorIsbn(isbn));
-    }
-
-    @GetMapping("")
-    public ResponseEntity<?> buscarLivros() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(livroService.buscarLivros(null));
     }
 
     @GetMapping("/{id}")
