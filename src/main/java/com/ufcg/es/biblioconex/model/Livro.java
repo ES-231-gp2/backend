@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.ISBN;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class Livro {
 
     @JsonProperty("isbn")
     @Column(nullable = false, unique = true)
+    @ISBN(type = ISBN.Type.ANY)
     private String isbn;
 
     @JsonProperty("titulo")
@@ -58,7 +60,6 @@ public class Livro {
 
     @JsonProperty("capa")
     private String capa;
-
 
     @JsonProperty("exemplares")
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -33,7 +33,6 @@ class LivroControllerTests {
     ObjectMapper objectMapper;
     LivroDTO livroDTO;
     Livro livro;
-
     Livro livro2;
 
     @BeforeEach
@@ -59,6 +58,7 @@ class LivroControllerTests {
     @DisplayName("Cadastrar livro com dados válidos")
     void cadastrarLivro01() throws Exception {
         String responseJsonString = driver.perform(post(URI_LIVROS)
+                        .param("numeroExemplares", "2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(livroDTO)))
                 .andExpect(status().isCreated())
@@ -73,7 +73,6 @@ class LivroControllerTests {
         );
     }
 
-
     @Nested
     @DisplayName("Testes de livro do Mês")
     class LivroDoMesTest {
@@ -82,7 +81,7 @@ class LivroControllerTests {
             livro = livroRepository.save(Livro.builder()
                     .isbn("978-85-8057-301-5")
                     .titulo("Extraordinário")
-                    .autores(List.of("R. J. Palacio"))
+                    .autores(Set.of("R. J. Palacio"))
                     .editora("Intrínseca")
                     .ano("2013")
                     .paginas(320)
@@ -93,7 +92,7 @@ class LivroControllerTests {
             livro2 = livroRepository.save(Livro.builder()
                     .isbn("978-85-8057-302-2")
                     .titulo("Outro Livro")
-                    .autores(List.of("Autor do Outro Livro"))
+                    .autores(Set.of("Autor do Outro Livro"))
                     .editora("Editora do Outro Livro")
                     .ano("2022")
                     .paginas(250)
@@ -132,7 +131,7 @@ class LivroControllerTests {
 
             assertAll(
                     () -> assertNull(resultado[0]),
-                    ()-> assertTrue(resultado[1].isLivroDoMes()),
+                    () -> assertTrue(resultado[1].isLivroDoMes()),
                     () -> assertEquals(livro.getId(), resultado[1].getId())
             );
         }

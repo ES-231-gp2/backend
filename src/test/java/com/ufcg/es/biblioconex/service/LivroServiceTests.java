@@ -91,63 +91,63 @@ class LivroServiceTests {
 
     @Test
     @DisplayName("Adicionar livro como primeiro livro do mês")
-    void adicionaLivroDoMes(){
-        Livro livro = livroService.cadastrarLivro(livroDTO);
+    void adicionaLivroDoMes() {
+        Livro livro = livroService.cadastrarLivro(livroDTO, 2);
 
         Livro[] livros = livroService.atualizarLivroDoMes(livro.getId());
 
         assertAll(
-            ()-> assertEquals(livro.getId(), livros[1].getId()),
-            ()-> assertNull(livros[0])
+                () -> assertEquals(livro.getId(), livros[1].getId()),
+                () -> assertNull(livros[0])
         );
     }
 
     @Test
     @DisplayName("Adicionar livro como segundo livro do mês")
-    void adicionaSegundoLivroDoMes(){
+    void adicionaSegundoLivroDoMes() {
         LivroDTO segundoLivroDTO = LivroDTO.builder()
                 .isbn("978-85-8057-301-5")
                 .titulo("Extraordinário")
-                .autores(List.of("R. J. Palacio"))
+                .autores(Set.of("R. J. Palacio"))
                 .editora("Intrínseca")
                 .ano("2013")
                 .paginas("320")
                 .build();
 
-        Livro primeiroLivro = livroService.cadastrarLivro(livroDTO);
-        Livro segundoLivro = livroService.cadastrarLivro(segundoLivroDTO);
+        Livro primeiroLivro = livroService.cadastrarLivro(livroDTO, 2);
+        Livro segundoLivro = livroService.cadastrarLivro(segundoLivroDTO, 1);
 
         livroService.atualizarLivroDoMes(primeiroLivro.getId());
         Livro[] livros = livroService.atualizarLivroDoMes(segundoLivro.getId());
 
         assertAll(
-                ()-> assertEquals(primeiroLivro.getId(), livros[0].getId()),
-                ()-> assertEquals(segundoLivro.getId(), livros[1].getId())
+                () -> assertEquals(primeiroLivro.getId(), livros[0].getId()),
+                () -> assertEquals(segundoLivro.getId(), livros[1].getId())
         );
     }
 
     @Test
     @DisplayName("Vê o livro do mês")
-    void verLivroDoMes(){
-        Livro livro = livroService.cadastrarLivro(livroDTO);
+    void verLivroDoMes() {
+        Livro livro = livroService.cadastrarLivro(livroDTO, 2);
 
         livroService.atualizarLivroDoMes(livro.getId());
 
         Livro livroDoMes = livroService.verLivroDoMes();
 
         assertAll(
-                ()-> assertEquals(livroDoMes.getId(), livro.getId()),
-                ()-> assertTrue(livroDoMes.isLivroDoMes())
+                () -> assertEquals(livroDoMes.getId(), livro.getId()),
+                () -> assertTrue(livroDoMes.isLivroDoMes())
         );
     }
 
     @Test
     @DisplayName("Ver livro do mês sem ter um livro do mês")
-    void verLivroDoMesNulo(){
+    void verLivroDoMesNulo() {
         Livro livroDoMes = livroService.verLivroDoMes();
 
         assertAll(
-                ()-> assertNull(livroDoMes)
+                () -> assertNull(livroDoMes)
         );
     }
 }
