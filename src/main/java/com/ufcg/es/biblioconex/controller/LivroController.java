@@ -42,4 +42,11 @@ public class LivroController {
                 .status(HttpStatus.OK)
                 .body(livroService.atualizarLivroDoMes(id));
     }
+
+    @GetMapping("/livro-do-mes")
+    public ResponseEntity<?> verLivroDoMes() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.verLivroDoMes());
+    }
 }

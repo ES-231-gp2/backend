@@ -24,8 +24,6 @@ class LivroServiceTests {
     LivroRepository livroRepository;
     LivroDTO livroDTO;
 
-    LivroDTO livroDTO2;
-
     @BeforeEach
     void setup() {
         livroDTO = LivroDTO.builder()
@@ -125,6 +123,31 @@ class LivroServiceTests {
         assertAll(
                 ()-> assertEquals(primeiroLivro.getId(), livros[0].getId()),
                 ()-> assertEquals(segundoLivro.getId(), livros[1].getId())
+        );
+    }
+
+    @Test
+    @DisplayName("Vê o livro do mês")
+    void verLivroDoMes(){
+        Livro livro = livroService.cadastrarLivro(livroDTO);
+
+        livroService.atualizarLivroDoMes(livro.getId());
+
+        Livro livroDoMes = livroService.verLivroDoMes();
+
+        assertAll(
+                ()-> assertEquals(livroDoMes.getId(), livro.getId()),
+                ()-> assertTrue(livroDoMes.isLivroDoMes())
+        );
+    }
+
+    @Test
+    @DisplayName("Ver livro do mês sem ter um livro do mês")
+    void verLivroDoMesNulo(){
+        Livro livroDoMes = livroService.verLivroDoMes();
+
+        assertAll(
+                ()-> assertNull(livroDoMes)
         );
     }
 }
