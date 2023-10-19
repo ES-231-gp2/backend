@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.ISBN;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
@@ -25,6 +27,7 @@ public class Livro {
 
     @JsonProperty("isbn")
     @Column(nullable = false, unique = true)
+    @ISBN(type = ISBN.Type.ANY)
     private String isbn;
 
     @JsonProperty("titulo")
@@ -34,7 +37,8 @@ public class Livro {
     @JsonProperty("autores")
     @ElementCollection
     @Column(nullable = false)
-    private List<String> autores = new ArrayList<>();
+    @Builder.Default
+    private Set<String> autores = new LinkedHashSet<>();
 
     @JsonProperty("editora")
     @Column(nullable = false)
@@ -54,10 +58,34 @@ public class Livro {
     @Lob
     private String descricao;
 
+    @JsonProperty("generos")
+    @ElementCollection
+    @Builder.Default
+    private Set<String> generos = new LinkedHashSet<>();
+
     @JsonProperty("capa")
     private String capa;
 
+    @JsonProperty("exemplares")
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Exemplar> exemplares = new LinkedHashSet<>();
+
     @JsonProperty("livroDoMes")
     @Column(nullable = false)
-    private boolean livroDoMes = false;
+    @Builder.Default
+    private Boolean livroDoMes = false;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Livro livro = (Livro) o;
+        return Objects.equals(isbn, livro.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
+    }
 }

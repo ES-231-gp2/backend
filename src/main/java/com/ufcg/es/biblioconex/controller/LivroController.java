@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping(
         value = "/api/livros",
@@ -21,10 +23,26 @@ public class LivroController {
 
     @PostMapping()
     public ResponseEntity<?> cadastrarLivro(
-            @RequestBody @Valid LivroDTO livroDTO) {
+            @RequestBody @Valid LivroDTO livroDTO,
+            @RequestParam Integer numeroExemplares) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(livroService.cadastrarLivro(livroDTO));
+                .body(livroService.cadastrarLivro(livroDTO, numeroExemplares));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> buscarLivros() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.buscarLivros(null));
+    }
+
+    @GetMapping("/generos")
+    public ResponseEntity<?> buscarLivrosPorGenero(
+            @RequestParam Set<String> generos) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.buscarLivrosPorGenero(generos));
     }
 
     @GetMapping("/isbn/{isbn}")
@@ -33,6 +51,41 @@ public class LivroController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(livroService.buscarLivroPorIsbn(isbn));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarLivro(
+            @PathVariable(required = false) Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.buscarLivros(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizarLivro(
+            @PathVariable Long id,
+            @RequestBody @Valid LivroDTO livroDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.atualizarLivro(id, livroDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removerLivro(
+            @PathVariable Long id) {
+        livroService.removerLivro(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PutMapping("/exemplares/{id}")
+    public ResponseEntity<?> adicionarExemplares(
+            @PathVariable Long id,
+            @RequestParam Integer numeroExemplares) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.adicionarExemplares(id, numeroExemplares));
     }
 
     @PutMapping("/livro-do-mes/{id}")

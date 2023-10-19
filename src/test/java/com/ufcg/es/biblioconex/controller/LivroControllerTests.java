@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,7 +33,6 @@ class LivroControllerTests {
     ObjectMapper objectMapper;
     LivroDTO livroDTO;
     Livro livro;
-
     Livro livro2;
 
     @BeforeEach
@@ -41,7 +40,7 @@ class LivroControllerTests {
         livroDTO = LivroDTO.builder()
                 .isbn("978-85-8057-301-5")
                 .titulo("Extraordinário")
-                .autores(List.of("R. J. Palacio"))
+                .autores(Set.of("R. J. Palacio"))
                 .editora("Intrínseca")
                 .ano("2013")
                 .paginas("320")
@@ -59,6 +58,7 @@ class LivroControllerTests {
     @DisplayName("Cadastrar livro com dados válidos")
     void cadastrarLivro01() throws Exception {
         String responseJsonString = driver.perform(post(URI_LIVROS)
+                        .param("numeroExemplares", "2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(livroDTO)))
                 .andExpect(status().isCreated())
@@ -73,7 +73,6 @@ class LivroControllerTests {
         );
     }
 
-
     @Nested
     @DisplayName("Testes de livro do Mês")
     class LivroDoMesTest {
@@ -82,7 +81,7 @@ class LivroControllerTests {
             livro = livroRepository.save(Livro.builder()
                     .isbn("978-85-8057-301-5")
                     .titulo("Extraordinário")
-                    .autores(List.of("R. J. Palacio"))
+                    .autores(Set.of("R. J. Palacio"))
                     .editora("Intrínseca")
                     .ano("2013")
                     .paginas(320)
@@ -93,7 +92,7 @@ class LivroControllerTests {
             livro2 = livroRepository.save(Livro.builder()
                     .isbn("978-85-8057-302-2")
                     .titulo("Outro Livro")
-                    .autores(List.of("Autor do Outro Livro"))
+                    .autores(Set.of("Autor do Outro Livro"))
                     .editora("Editora do Outro Livro")
                     .ano("2022")
                     .paginas(250)
@@ -132,7 +131,7 @@ class LivroControllerTests {
 
             assertAll(
                     () -> assertNull(resultado[0]),
-                    ()-> assertTrue(resultado[1].isLivroDoMes()),
+                    () -> assertTrue(resultado[1].getLivroDoMes()),
                     () -> assertEquals(livro.getId(), resultado[1].getId())
             );
         }
@@ -156,7 +155,7 @@ class LivroControllerTests {
 
             assertAll(
                     () -> assertEquals(livro.getId(), resultado2[0].getId()),
-                    () -> assertTrue(resultado2[1].isLivroDoMes()),
+                    () -> assertTrue(resultado2[1].getLivroDoMes()),
                     () -> assertEquals(livro2.getId(), resultado2[1].getId())
             );
         }
@@ -176,11 +175,11 @@ class LivroControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            Livro livro = objectMapper.readValue(responseJsonString, Livro.class);
+            Livro resultado = objectMapper.readValue(responseJsonString, Livro.class);
 
             assertAll(
-                    () -> assertTrue(livro.isLivroDoMes()),
-                    () -> assertEquals(livro.getId(), livro.getId())
+                    () -> assertTrue(resultado.getLivroDoMes()),
+                    () -> assertEquals(livro.getId(), resultado.getId())
             );
         }
 
@@ -193,7 +192,7 @@ class LivroControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            assertTrue(responseJsonString == null || responseJsonString.isEmpty());
+            assertTrue(responseJsonString.isEmpty());
         }
 
     }
