@@ -25,4 +25,6 @@ public interface LivroService {
     Livro[] atualizarLivroDoMes(Long id);
 
     Livro verLivroDoMes();
+
+    List<Livro> buscarMaisLidos();
 }

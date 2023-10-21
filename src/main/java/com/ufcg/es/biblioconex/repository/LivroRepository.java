@@ -15,4 +15,7 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
     List<Livro> findByGenerosInOrderByTituloAsc(Set<String> generos);
 
     Livro findFirstByLivroDoMesTrue();
+
+    List<Livro> findTop10ByOrderByLeiturasDesc();
+
 }

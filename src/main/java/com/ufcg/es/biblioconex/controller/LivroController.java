@@ -102,4 +102,11 @@ public class LivroController {
                 .status(HttpStatus.OK)
                 .body(livroService.verLivroDoMes());
     }
+
+    @GetMapping("/mais-lidos")
+    public ResponseEntity<?> buscarMaisLidos() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(livroService.buscarMaisLidos());
+    }
 }

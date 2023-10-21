@@ -5,8 +5,10 @@ import com.ufcg.es.biblioconex.exception.BiblioConexException;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
 import com.ufcg.es.biblioconex.model.Emprestimo;
 import com.ufcg.es.biblioconex.model.Exemplar;
+import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.repository.EmprestimoRepository;
 import com.ufcg.es.biblioconex.repository.ExemplarRepository;
+import com.ufcg.es.biblioconex.repository.LivroRepository;
 import com.ufcg.es.biblioconex.utils.StatusExemplarEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,8 @@ import java.util.Set;
 
 @Service
 public class ExemplarServiceImpl implements ExemplarService {
-
+    @Autowired
+    LivroRepository livroRepository;
     @Autowired
     EmprestimoRepository emprestimoRepository;
     @Autowired
@@ -59,6 +62,10 @@ public class ExemplarServiceImpl implements ExemplarService {
 
         exemplar.setStatus(StatusExemplarEnum.DISPONIVEL);
         exemplarRepository.save(exemplar);
+
+        Livro livro = exemplar.getLivro();
+        livro.setLeituras(livro.getLeituras() + 1);
+        livroRepository.save(livro);
 
         return emprestimo;
     }
