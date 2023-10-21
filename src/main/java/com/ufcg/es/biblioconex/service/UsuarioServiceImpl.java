@@ -21,7 +21,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public Usuario login(String login, String senha) {
-        Usuario usuario = this.usuarioRepository.findByLogin(login);
+        Usuario usuario = this.usuarioRepository.findByEmail(login);
         if (usuario == null) {
             throw new UsuarioNaoEncontradoException();
         }else{
