@@ -20,8 +20,8 @@ public class UsuarioServiceImpl implements UsuarioService{
     ModelMapper modelMapper;
 
     @Override
-    public Usuario login(String login, String senha) {
-        Usuario usuario = this.usuarioRepository.findByEmail(login);
+    public Usuario login(String email, String senha) {
+        Usuario usuario = this.usuarioRepository.findByEmail(email);
         if (usuario == null) {
             throw new UsuarioNaoEncontradoException();
         }else{

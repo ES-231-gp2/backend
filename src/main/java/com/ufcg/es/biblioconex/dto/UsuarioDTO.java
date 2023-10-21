@@ -25,6 +25,5 @@ public class UsuarioDTO {
 
     @JsonProperty("tipoUsuario")
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "O tipo do usuário não pode ser vazio")
     private TipoUsuarioEnum tipoUsuario;
 }
