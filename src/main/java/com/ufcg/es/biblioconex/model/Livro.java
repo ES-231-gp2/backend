@@ -77,7 +77,8 @@ public class Livro {
     private Boolean livroDoMes = false;
 
     @JsonProperty("leituras")
-    private int leituras = 0;
+    @Builder.Default
+    private Integer leituras = 0;
 
     @Override
     public boolean equals(Object o) {
