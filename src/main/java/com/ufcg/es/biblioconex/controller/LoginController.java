@@ -22,10 +22,10 @@ public class LoginController {
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrarUsuario(
             @RequestBody @Valid UsuarioDTO usuarioDTO,
-            @RequestParam String login, @RequestParam String senha) {
+            @RequestParam String loginBibliotecario, @RequestParam String senhaBibliotecario) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(usuarioService.cadastrarUsuario(login, senha, usuarioDTO));
+                .body(usuarioService.cadastrarUsuario(loginBibliotecario, senhaBibliotecario, usuarioDTO));
     }
 
     @GetMapping("")

@@ -2,6 +2,8 @@ package com.ufcg.es.biblioconex.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ufcg.es.biblioconex.enums.TipoUsuarioEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,15 +15,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioDTO {
-    @JsonProperty("login")
-    @NotBlank(message = "O login não pode ser vazio")
-    private String login;
+    @JsonProperty("email")
+    @NotBlank(message = "O email não pode ser vazio")
+    private String email;
 
     @JsonProperty("senha")
     @NotBlank(message = "A senha não pode ser vazia")
     private String senha;
 
     @JsonProperty("tipoUsuario")
+    @Enumerated(EnumType.STRING)
     @NotBlank(message = "O tipo do usuário não pode ser vazio")
     private TipoUsuarioEnum tipoUsuario;
 }
