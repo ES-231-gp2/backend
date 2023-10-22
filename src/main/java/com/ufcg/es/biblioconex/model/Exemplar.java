@@ -2,7 +2,7 @@ package com.ufcg.es.biblioconex.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.es.biblioconex.utils.StatusExemplarEnum;
+import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
