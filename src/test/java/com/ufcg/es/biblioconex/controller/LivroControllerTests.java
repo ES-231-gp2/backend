@@ -3,197 +3,363 @@ package com.ufcg.es.biblioconex.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.es.biblioconex.dto.LivroDTO;
 import com.ufcg.es.biblioconex.model.Livro;
-import com.ufcg.es.biblioconex.repository.LivroRepository;
-import org.junit.jupiter.api.*;
+import com.ufcg.es.biblioconex.service.LivroService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@DisplayName("Testes do controlador de Livros")
+@ContextConfiguration(classes = {LivroController.class})
+@ExtendWith(SpringExtension.class)
 class LivroControllerTests {
-
-    final String URI_LIVROS = "/api/livros";
-
     @Autowired
-    MockMvc driver;
-    @Autowired
-    LivroRepository livroRepository;
-    @Autowired
-    ObjectMapper objectMapper;
-    LivroDTO livroDTO;
-    Livro livro;
-    Livro livro2;
+    private LivroController livroController;
 
-    @BeforeEach
-    void setup() {
-        livroDTO = LivroDTO.builder()
-                .isbn("978-85-8057-301-5")
-                .titulo("Extraordinário")
-                .autores(Set.of("R. J. Palacio"))
-                .editora("Intrínseca")
-                .ano("2013")
-                .paginas("320")
-                .edicao(1)
-                .descricao("August Pullman, o Auggie, nasceu com uma síndrome genética cuja sequela é uma severa deformidade facial, que lhe impôs diversas cirurgias e complicações médicas. Por isso, ele nunca havia frequentado uma escola de verdade - até agora. Todo mundo sabe que é difícil ser um aluno novo, mais ainda quando se tem um rosto tão diferente. Prestes a começar o quinto ano em um colégio particular de Nova York, Auggie tem uma missão nada fácil pela frente - convencer os colegas de que, apesar da aparência incomum, ele é um menino igual a todos os outros.")
-                .build();
-    }
+    @MockBean
+    private LivroService livroService;
 
-    @AfterEach
-    void tearDown() {
-        livroRepository.deleteAll();
-    }
-
+    /**
+     * Method under test: {@link LivroController#buscarLivros()}
+     */
     @Test
-    @DisplayName("Cadastrar livro com dados válidos")
-    void cadastrarLivro01() throws Exception {
-        String responseJsonString = driver.perform(post(URI_LIVROS)
-                        .param("numeroExemplares", "2")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(livroDTO)))
-                .andExpect(status().isCreated())
-                .andDo(print())
-                .andReturn().getResponse().getContentAsString();
-
-        Livro resultado = objectMapper.readValue(responseJsonString, Livro.LivroBuilder.class).build();
-
-        assertAll(
-                () -> assertNotNull(resultado.getId()),
-                () -> assertEquals(livroDTO.getIsbn(), resultado.getIsbn())
-        );
+    void testBuscarLivros() throws Exception {
+        when(livroService.buscarLivros(Mockito.<Long>any())).thenReturn(new ArrayList<>());
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.get("/api/livros");
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
-    @Nested
-    @DisplayName("Testes de livro do Mês")
-    class LivroDoMesTest {
-        @BeforeEach
-        void setup() {
-            livro = livroRepository.save(Livro.builder()
-                    .isbn("978-85-8057-301-5")
-                    .titulo("Extraordinário")
-                    .autores(Set.of("R. J. Palacio"))
-                    .editora("Intrínseca")
-                    .ano("2013")
-                    .paginas(320)
-                    .edicao(1)
-                    .descricao("August Pullman, o Auggie, nasceu com uma síndrome genética cuja sequela é uma severa deformidade facial, que lhe impôs diversas cirurgias e complicações médicas. Por isso, ele nunca havia frequentado uma escola de verdade - até agora. Todo mundo sabe que é difícil ser um aluno novo, mais ainda quando se tem um rosto tão diferente. Prestes a começar o quinto ano em um colégio particular de Nova York, Auggie tem uma missão nada fácil pela frente - convencer os colegas de que, apesar da aparência incomum, ele é um menino igual a todos os outros.")
-                    .build());
+    /**
+     * Method under test: {@link LivroController#buscarLivrosPorGenero(Set)}
+     */
+    @Test
+    void testBuscarLivrosPorGenero() throws Exception {
+        when(livroService.buscarLivrosPorGenero(Mockito.any())).thenReturn(new ArrayList<>());
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get(
+                "/api/livros/generos");
+        MockHttpServletRequestBuilder requestBuilder = getResult.param(
+                "generos", String.valueOf(new HashSet<>()));
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
+    }
 
-            livro2 = livroRepository.save(Livro.builder()
-                    .isbn("978-85-8057-302-2")
-                    .titulo("Outro Livro")
-                    .autores(Set.of("Autor do Outro Livro"))
-                    .editora("Editora do Outro Livro")
-                    .ano("2022")
-                    .paginas(250)
-                    .edicao(2)
-                    .descricao("Descrição do Outro Livro.")
-                    .build());
+    /**
+     * Method under test: {@link LivroController#buscarLivroPorIsbn(String)}
+     */
+    @Test
+    void testBuscarLivroPorIsbn() throws Exception {
+        when(livroService.buscarLivroPorIsbn(Mockito.any())).thenReturn(LivroDTO.builder()
+                .ano("Ano")
+                .capa("Capa")
+                .descricao("Descricao")
+                .edicao(1)
+                .editora("Editora")
+                .paginas("Paginas")
+                .titulo("Titulo")
+                .build());
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.get("/api/livros/isbn/{isbn}", "Isbn");
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"isbn\":null,\"titulo\":\"Titulo\"," +
+                                        "\"autores\":[]," +
+                                        "\"editora\":\"Editora\"," +
+                                        "\"ano\":\"Ano\"," +
+                                        "\"paginas\":\"Paginas\",\"edicao"
+                                        + "\":1,\"descricao\":\"Descricao\"," +
+                                        "\"generos\":[],\"capa\":\"Capa\"}"));
+    }
 
+    /**
+     * Method under test: {@link LivroController#removerLivro(Long)}
+     */
+    @Test
+    void testRemoverLivro() throws Exception {
+        doNothing().when(livroService).removerLivro(Mockito.<Long>any());
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.delete("/api/livros/{id}", 1L);
+        ResultActions actualPerformResult =
+                MockMvcBuilders.standaloneSetup(livroController)
+                        .build()
+                        .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
 
-            livroDTO = LivroDTO.builder()
-                    .isbn(livro.getIsbn())
-                    .titulo(livro.getTitulo())
-                    .autores(livro.getAutores())
-                    .editora(livro.getEditora())
-                    .ano(livro.getAno())
-                    .paginas("" + livro.getPaginas())
-                    .edicao(livro.getEdicao())
-                    .descricao(livro.getDescricao())
-                    .build();
-        }
+    /**
+     * Method under test: {@link LivroController#removerLivro(Long)}
+     */
+    @Test
+    void testRemoverLivro2() throws Exception {
+        doNothing().when(livroService).removerLivro(Mockito.<Long>any());
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.delete("/api/livros/{id}", 1L);
+        requestBuilder.contentType("https://example.org/example");
+        ResultActions actualPerformResult =
+                MockMvcBuilders.standaloneSetup(livroController)
+                        .build()
+                        .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
 
-        @AfterEach
-        void tearDown() {
-            livroRepository.deleteAll();
-        }
+    /**
+     * Method under test:
+     * {@link LivroController#adicionarExemplares(Long, Integer)}
+     */
+    @Test
+    void testAdicionarExemplares() throws Exception {
+        Livro livro = new Livro();
+        livro.setAno("Ano");
+        livro.setAutores(new HashSet<>());
+        livro.setCapa("Capa");
+        livro.setDescricao("Descricao");
+        livro.setEdicao(1);
+        livro.setEditora("Editora");
+        livro.setExemplares(new HashSet<>());
+        livro.setGeneros(new HashSet<>());
+        livro.setId(1L);
+        livro.setIsbn("Isbn");
+        livro.setLivroDoMes(true);
+        livro.setPaginas(1);
+        livro.setTitulo("Titulo");
+        when(livroService.adicionarExemplares(Mockito.<Long>any(),
+                Mockito.<Integer>any())).thenReturn(livro);
+        MockHttpServletRequestBuilder putResult = MockMvcRequestBuilders.put(
+                "/api/livros/exemplares/{id}", 1L);
+        MockHttpServletRequestBuilder requestBuilder = putResult.param(
+                "numeroExemplares", String.valueOf(1));
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"id\":1,\"isbn\":\"Isbn\"," +
+                                        "\"titulo\":\"Titulo\"," +
+                                        "\"autores\":[]," +
+                                        "\"editora\":\"Editora\"," +
+                                        "\"ano\":\"Ano\",\"paginas\":1,"
+                                        + "\"edicao\":1," +
+                                        "\"descricao\":\"Descricao\"," +
+                                        "\"generos\":[],\"capa\":\"Capa\"," +
+                                        "\"exemplares\":[]," +
+                                        "\"livroDoMes\":true}"));
+    }
 
-        @Test
-        @DisplayName("Atualizar primeiro livro do mês")
-        void atualizarPrimeiroLivroDoMes() throws Exception {
-            String responseJsonString = driver.perform(put(URI_LIVROS + "/livro-do-mes/" + livro.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn().getResponse().getContentAsString();
+    /**
+     * Method under test: {@link LivroController#atualizarLivroDoMes(Long)}
+     */
+    @Test
+    void testAtualizarLivroDoMes() throws Exception {
+        Livro livro = new Livro();
+        livro.setAno("Ano");
+        livro.setAutores(new HashSet<>());
+        livro.setCapa("Capa");
+        livro.setDescricao("Descricao");
+        livro.setEdicao(1);
+        livro.setEditora("Editora");
+        livro.setExemplares(new HashSet<>());
+        livro.setGeneros(new HashSet<>());
+        livro.setId(1L);
+        livro.setIsbn("Isbn");
+        livro.setLivroDoMes(true);
+        livro.setPaginas(1);
+        livro.setTitulo("Titulo");
+        when(livroService.atualizarLivroDoMes(Mockito.<Long>any())).thenReturn(new Livro[]{livro});
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.put("/api/livros/livro-do-mes/{id}", 1L);
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "[{\"id\":1,\"isbn\":\"Isbn\"," +
+                                        "\"titulo\":\"Titulo\"," +
+                                        "\"autores\":[]," +
+                                        "\"editora\":\"Editora\"," +
+                                        "\"ano\":\"Ano\",\"paginas\":1,"
+                                        + "\"edicao\":1," +
+                                        "\"descricao\":\"Descricao\"," +
+                                        "\"generos\":[],\"capa\":\"Capa\"," +
+                                        "\"exemplares\":[]," +
+                                        "\"livroDoMes\":true}]"));
+    }
 
-            Livro[] resultado = objectMapper.readValue(responseJsonString, Livro[].class);
+    /**
+     * Method under test: {@link LivroController#verLivroDoMes()}
+     */
+    @Test
+    void testVerLivroDoMes() throws Exception {
+        Livro livro = new Livro();
+        livro.setAno("Ano");
+        livro.setAutores(new HashSet<>());
+        livro.setCapa("Capa");
+        livro.setDescricao("Descricao");
+        livro.setEdicao(1);
+        livro.setEditora("Editora");
+        livro.setExemplares(new HashSet<>());
+        livro.setGeneros(new HashSet<>());
+        livro.setId(1L);
+        livro.setIsbn("Isbn");
+        livro.setLivroDoMes(true);
+        livro.setPaginas(1);
+        livro.setTitulo("Titulo");
+        when(livroService.verLivroDoMes()).thenReturn(livro);
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.get("/api/livros/livro-do-mes");
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"id\":1,\"isbn\":\"Isbn\"," +
+                                        "\"titulo\":\"Titulo\"," +
+                                        "\"autores\":[]," +
+                                        "\"editora\":\"Editora\"," +
+                                        "\"ano\":\"Ano\",\"paginas\":1,"
+                                        + "\"edicao\":1," +
+                                        "\"descricao\":\"Descricao\"," +
+                                        "\"generos\":[],\"capa\":\"Capa\"," +
+                                        "\"exemplares\":[]," +
+                                        "\"livroDoMes\":true}"));
+    }
 
-            assertAll(
-                    () -> assertNull(resultado[0]),
-                    () -> assertTrue(resultado[1].getLivroDoMes()),
-                    () -> assertEquals(livro.getId(), resultado[1].getId())
-            );
-        }
+    /**
+     * Method under test: {@link LivroController#atualizarLivro(Long, LivroDTO)}
+     */
+    @Test
+    void testAtualizarLivro() throws Exception {
+        LivroDTO livroDTO = new LivroDTO();
+        livroDTO.setAno("Ano");
+        livroDTO.setAutores(new HashSet<>());
+        livroDTO.setCapa("Capa");
+        livroDTO.setDescricao("Descricao");
+        livroDTO.setEdicao(1);
+        livroDTO.setEditora("Editora");
+        livroDTO.setGeneros(new HashSet<>());
+        livroDTO.setIsbn("Isbn");
+        livroDTO.setPaginas("Paginas");
+        livroDTO.setTitulo("Titulo");
+        String content = (new ObjectMapper()).writeValueAsString(livroDTO);
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.put("/api/livros/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content);
+        ResultActions actualPerformResult =
+                MockMvcBuilders.standaloneSetup(livroController)
+                        .build()
+                        .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
+    }
 
-        @Test
-        @DisplayName("Atualizar segundo livro do mês")
-        void atualizarSegundoLivroDoMes() throws Exception {
-            driver.perform(put(URI_LIVROS + "/livro-do-mes/" + livro.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn().getResponse().getContentAsString();
+    /**
+     * Method under test: {@link LivroController#buscarLivro(Long)}
+     */
+    @Test
+    void testBuscarLivro() throws Exception {
+        when(livroService.buscarLivros(Mockito.<Long>any())).thenReturn(new ArrayList<>());
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.get("/api/livros/{id}", 1L);
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
+    }
 
-            String responseJsonString2 = driver.perform(put(URI_LIVROS + "/livro-do-mes/" + livro2.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn().getResponse().getContentAsString();
+    /**
+     * Method under test: {@link LivroController#buscarLivro(Long)}
+     */
+    @Test
+    void testBuscarLivro2() throws Exception {
+        when(livroService.buscarLivros(Mockito.<Long>any())).thenReturn(new ArrayList<>());
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.get("/api/livros/{id}", "",
+                        "Uri Variables");
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
+    }
 
-            Livro[] resultado2 = objectMapper.readValue(responseJsonString2, Livro[].class);
+    /**
+     * Method under test:
+     * {@link LivroController#cadastrarLivro(LivroDTO, Integer)}
+     */
+    @Test
+    void testCadastrarLivro() throws Exception {
+        when(livroService.buscarLivros(Mockito.<Long>any())).thenReturn(new ArrayList<>());
 
-            assertAll(
-                    () -> assertEquals(livro.getId(), resultado2[0].getId()),
-                    () -> assertTrue(resultado2[1].getLivroDoMes()),
-                    () -> assertEquals(livro2.getId(), resultado2[1].getId())
-            );
-        }
-
-        @Test
-        @DisplayName("Ver livro do mês")
-        void verLivroDoMes() throws Exception {
-            driver.perform(put(URI_LIVROS + "/livro-do-mes/" + livro.getId())
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn().getResponse().getContentAsString();
-
-            String responseJsonString = driver.perform(get(URI_LIVROS + "/livro-do-mes")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn().getResponse().getContentAsString();
-
-            Livro resultado = objectMapper.readValue(responseJsonString, Livro.class);
-
-            assertAll(
-                    () -> assertTrue(resultado.getLivroDoMes()),
-                    () -> assertEquals(livro.getId(), resultado.getId())
-            );
-        }
-
-        @Test
-        @DisplayName("Ver livro do mês sem livro do mês")
-        void verLivroDoMesNulo() throws Exception {
-            String responseJsonString = driver.perform(get(URI_LIVROS + "/livro-do-mes")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print())
-                    .andReturn().getResponse().getContentAsString();
-
-            assertTrue(responseJsonString.isEmpty());
-        }
-
+        LivroDTO livroDTO = new LivroDTO();
+        livroDTO.setAno("Ano");
+        livroDTO.setAutores(new HashSet<>());
+        livroDTO.setCapa("Capa");
+        livroDTO.setDescricao("Descricao");
+        livroDTO.setEdicao(1);
+        livroDTO.setEditora("Editora");
+        livroDTO.setGeneros(new HashSet<>());
+        livroDTO.setIsbn("Isbn");
+        livroDTO.setPaginas("Paginas");
+        livroDTO.setTitulo("Titulo");
+        String content = (new ObjectMapper()).writeValueAsString(livroDTO);
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get(
+                "/api/livros");
+        MockHttpServletRequestBuilder requestBuilder = getResult.param(
+                        "numeroExemplares", String.valueOf(1))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        MockMvcBuilders.standaloneSetup(livroController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(
+                        "application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 }
+
