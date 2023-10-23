@@ -1,13 +1,13 @@
 package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.EmprestimoDTO;
+import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.exception.BiblioConexException;
 import com.ufcg.es.biblioconex.model.Emprestimo;
 import com.ufcg.es.biblioconex.model.Exemplar;
 import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.repository.EmprestimoRepository;
 import com.ufcg.es.biblioconex.repository.ExemplarRepository;
-import com.ufcg.es.biblioconex.utils.StatusExemplarEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;

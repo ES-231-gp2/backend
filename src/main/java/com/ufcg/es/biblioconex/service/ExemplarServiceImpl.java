@@ -1,13 +1,13 @@
 package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.EmprestimoDTO;
+import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.exception.BiblioConexException;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
 import com.ufcg.es.biblioconex.model.Emprestimo;
 import com.ufcg.es.biblioconex.model.Exemplar;
 import com.ufcg.es.biblioconex.repository.EmprestimoRepository;
 import com.ufcg.es.biblioconex.repository.ExemplarRepository;
-import com.ufcg.es.biblioconex.utils.StatusExemplarEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
