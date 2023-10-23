@@ -27,7 +27,8 @@ public class ExemplarServiceImpl implements ExemplarService {
 
     @Override
     public Emprestimo realizarEmprestimo(EmprestimoDTO emprestimoDTO) {
-        Exemplar exemplar = exemplarRepository.findById(emprestimoDTO.getExemplarId()).orElseThrow(ObjetoNaoExisteException::new);
+        Exemplar exemplar =
+                exemplarRepository.findById(emprestimoDTO.getExemplarId()).orElseThrow(ObjetoNaoExisteException::new);
 
         Emprestimo emprestimo = Emprestimo.builder()
                 .exemplar(exemplar)
@@ -58,6 +59,7 @@ public class ExemplarServiceImpl implements ExemplarService {
         emprestimoRepository.save(emprestimo);
 
         exemplar.setStatus(StatusExemplarEnum.DISPONIVEL);
+        exemplar.getLivro().setLeituras(exemplar.getLivro().getLeituras() + 1);
         exemplarRepository.save(exemplar);
 
         return emprestimo;

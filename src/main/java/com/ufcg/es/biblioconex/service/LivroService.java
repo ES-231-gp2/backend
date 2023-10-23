@@ -80,4 +80,6 @@ public interface LivroService {
      * @return o livro do mês
      */
     Livro verLivroDoMes();
+
+    List<Livro> buscarMaisLidos();
 }

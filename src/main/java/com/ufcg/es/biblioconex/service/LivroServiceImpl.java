@@ -117,4 +117,9 @@ public class LivroServiceImpl implements LivroService {
     public Livro verLivroDoMes() {
         return livroRepository.findFirstByLivroDoMesTrue();
     }
+
+    @Override
+    public List<Livro> buscarMaisLidos() {
+        return livroRepository.findTop10ByOrderByLeiturasDesc();
+    }
 }
