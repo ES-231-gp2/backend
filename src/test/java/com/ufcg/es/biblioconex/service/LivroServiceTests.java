@@ -1,11 +1,11 @@
 package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.LivroDTO;
+import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
 import com.ufcg.es.biblioconex.model.Exemplar;
 import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.repository.LivroRepository;
-import com.ufcg.es.biblioconex.utils.StatusExemplarEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;

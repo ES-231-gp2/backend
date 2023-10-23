@@ -2,11 +2,11 @@ package com.ufcg.es.biblioconex.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.es.biblioconex.dto.EmprestimoDTO;
+import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.model.Emprestimo;
 import com.ufcg.es.biblioconex.model.Exemplar;
 import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.service.ExemplarService;
-import com.ufcg.es.biblioconex.utils.StatusExemplarEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
