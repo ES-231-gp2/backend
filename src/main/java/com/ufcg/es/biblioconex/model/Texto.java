@@ -1,9 +1,7 @@
 package com.ufcg.es.biblioconex.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +14,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Texto {
+
+    @JsonProperty("id")
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @JsonProperty("nome")
+    @Column(nullable = false)
     private String nome;
+
+    @JsonProperty("resumo")
     private String resumo;
+
+    @JsonProperty("conteudo")
+    @Column(nullable = false)
     private String conteudo;
 }

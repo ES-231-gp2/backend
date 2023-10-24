@@ -69,10 +69,10 @@ public interface LivroService {
     /**
      * Atualiza o livro do mês.
      *
-     * @param isbm isbm do livro
+     * @param isbn isbn do livro
      * @return o livro do mês atualizado
      */
-    Livro[] atualizarLivroDoMes(String isbm);
+    Livro[] atualizarLivroDoMes(String isbn);
 
     /**
      * Retorna o livro do mês.

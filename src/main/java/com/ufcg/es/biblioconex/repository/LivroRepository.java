@@ -19,5 +19,4 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
     List<Livro> findTop10ByOrderByLeiturasDesc();
 
     Livro findByIsbn(String isbn);
-
 }
