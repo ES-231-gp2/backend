@@ -27,9 +27,10 @@ public class Emprestimo {
     @JoinColumn(name = "exemplar_id")
     private Exemplar exemplar;
 
-    @JsonProperty("usuario_id")
-    @Column(nullable = false)
-    private Long usuario;
+    @JsonProperty("usuario")
+    @JoinColumn(name = "usuario_id")
+    @ManyToOne
+    private Usuario usuario;
 
     @JsonProperty("data_emprestimo")
     @Column(nullable = false, columnDefinition = "DATE")

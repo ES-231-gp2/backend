@@ -33,4 +33,12 @@ public class ExemplarController {
                 .status(HttpStatus.OK)
                 .body(exemplarService.realizarDevolucao(id));
     }
+
+    @GetMapping("/historico/{usuarioId}")
+    public ResponseEntity<?> consultarHistorico(
+            @PathVariable Long usuarioId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(exemplarService.consultarHistorico(usuarioId));
+    }
 }

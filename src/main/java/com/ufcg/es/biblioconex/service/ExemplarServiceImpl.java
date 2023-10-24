@@ -4,15 +4,20 @@ import com.ufcg.es.biblioconex.dto.EmprestimoDTO;
 import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.exception.BiblioConexException;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
+import com.ufcg.es.biblioconex.exception.UsuarioNaoEncontradoException;
 import com.ufcg.es.biblioconex.model.Emprestimo;
 import com.ufcg.es.biblioconex.model.Exemplar;
+import com.ufcg.es.biblioconex.model.Livro;
+import com.ufcg.es.biblioconex.model.Usuario;
 import com.ufcg.es.biblioconex.repository.EmprestimoRepository;
 import com.ufcg.es.biblioconex.repository.ExemplarRepository;
+import com.ufcg.es.biblioconex.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -20,6 +25,8 @@ public class ExemplarServiceImpl implements ExemplarService {
 
     @Autowired
     EmprestimoRepository emprestimoRepository;
+    @Autowired
+    UsuarioRepository usuarioRepository;
     @Autowired
     ExemplarRepository exemplarRepository;
     @Autowired
@@ -32,7 +39,7 @@ public class ExemplarServiceImpl implements ExemplarService {
 
         Emprestimo emprestimo = Emprestimo.builder()
                 .exemplar(exemplar)
-                .usuario(emprestimoDTO.getUsuario())
+                .usuario(usuarioRepository.findById(emprestimoDTO.getUsuario()).orElseThrow(UsuarioNaoEncontradoException::new))
                 .dataDevolucaoPrevista(emprestimoDTO.getDataDevolucaoPrevista())
                 .build();
 
@@ -64,4 +71,10 @@ public class ExemplarServiceImpl implements ExemplarService {
 
         return emprestimo;
     }
+
+    @Override
+    public List<Livro> consultarHistorico(Long usuarioId) {
+        return emprestimoRepository.consultarHistorico(usuarioRepository.findById(usuarioId).orElseThrow(UsuarioNaoEncontradoException::new));
+    }
+
 }
