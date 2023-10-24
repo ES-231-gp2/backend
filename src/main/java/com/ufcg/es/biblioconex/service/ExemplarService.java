@@ -2,6 +2,10 @@ package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.EmprestimoDTO;
 import com.ufcg.es.biblioconex.model.Emprestimo;
+import com.ufcg.es.biblioconex.model.Livro;
+import com.ufcg.es.biblioconex.model.Usuario;
+
+import java.util.List;
 
 public interface ExemplarService {
 
@@ -20,4 +24,6 @@ public interface ExemplarService {
      * @return o empréstimo devolvido
      */
     Emprestimo realizarDevolucao(Long id);
+
+    List<Livro> consultarHistorico(Long usuarioId);
 }
