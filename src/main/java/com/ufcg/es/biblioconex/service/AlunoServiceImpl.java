@@ -84,4 +84,5 @@ public class AlunoServiceImpl implements AlunoService {
     public Turma buscarTurmaAluno(Long id) {
         return turmaAlunoRepository.findTurmaByAlunoId(id).getTurma();
     }
+
 }

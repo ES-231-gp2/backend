@@ -58,4 +58,12 @@ public class TurmaController {
                 .status(HttpStatus.OK)
                 .body(turmaService.buscarAlunosTurma(id));
     }
+
+    @GetMapping("/texto/{id}")
+    public ResponseEntity<?> visualizarTextoTurma(
+            @PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(turmaService.visualizarTexto(id));
+    }
 }

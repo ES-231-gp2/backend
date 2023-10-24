@@ -1,36 +1,33 @@
 package com.ufcg.es.biblioconex.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.es.biblioconex.enums.SerieEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "turmas")
-public class Turma {
+public class Texto {
 
     @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @JsonProperty("serie")
+    @JsonProperty("nome")
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SerieEnum serie;
+    private String nome;
 
-    @JsonProperty("professor_id")
-    private Long professor;
+    @JsonProperty("resumo")
+    private String resumo;
 
-    @JsonProperty("texto")
-    @ManyToOne
-    @JoinColumn(name = "texto_id")
-    private Texto texto;
+    @JsonProperty("conteudo")
+    @Column(nullable = false)
+    private String conteudo;
 }

@@ -101,8 +101,8 @@ public class LivroServiceImpl implements LivroService {
     }
 
     @Override
-    public Livro[] atualizarLivroDoMes(Long id) {
-        Livro livro = livroRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
+    public Livro[] atualizarLivroDoMes(String isbn) {
+        Livro livro = livroRepository.findByIsbn(isbn);
         livro.setLivroDoMes(true);
 
         Livro livroDoMes = livroRepository.findFirstByLivroDoMesTrue();

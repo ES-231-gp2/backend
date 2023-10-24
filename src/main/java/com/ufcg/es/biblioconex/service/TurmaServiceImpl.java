@@ -3,6 +3,7 @@ package com.ufcg.es.biblioconex.service;
 import com.ufcg.es.biblioconex.dto.TurmaDTO;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
 import com.ufcg.es.biblioconex.model.Aluno;
+import com.ufcg.es.biblioconex.model.Texto;
 import com.ufcg.es.biblioconex.model.Turma;
 import com.ufcg.es.biblioconex.model.TurmaAluno;
 import com.ufcg.es.biblioconex.repository.TurmaAlunoRepository;
@@ -68,6 +69,12 @@ public class TurmaServiceImpl implements TurmaService {
         return turmaAlunos.stream()
                 .map(TurmaAluno::getAluno)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Texto visualizarTexto(Long turmaId) {
+        Turma turma = turmaRepository.findById(turmaId).orElseThrow(ObjetoNaoExisteException::new);
+        return turma.getTexto();
     }
 
     private void mapeiaAlunos(Turma turma, Set<Long> alunosId) {

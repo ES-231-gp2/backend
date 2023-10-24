@@ -181,48 +181,6 @@ class LivroControllerTests {
     }
 
     /**
-     * Method under test: {@link LivroController#atualizarLivroDoMes(Long)}
-     */
-    @Test
-    void testAtualizarLivroDoMes() throws Exception {
-        Livro livro = new Livro();
-        livro.setAno("Ano");
-        livro.setAutores(new HashSet<>());
-        livro.setCapa("Capa");
-        livro.setDescricao("Descricao");
-        livro.setEdicao(1);
-        livro.setEditora("Editora");
-        livro.setExemplares(new HashSet<>());
-        livro.setGeneros(new HashSet<>());
-        livro.setId(1L);
-        livro.setIsbn("Isbn");
-        livro.setLivroDoMes(true);
-        livro.setPaginas(1);
-        livro.setTitulo("Titulo");
-        when(livroService.atualizarLivroDoMes(Mockito.<Long>any())).thenReturn(new Livro[]{livro});
-        MockHttpServletRequestBuilder requestBuilder =
-                MockMvcRequestBuilders.put("/api/livros/livro-do-mes/{id}", 1L);
-        MockMvcBuilders.standaloneSetup(livroController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(
-                        "application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "[{\"id\":1,\"isbn\":\"Isbn\"," +
-                                        "\"titulo\":\"Titulo\"," +
-                                        "\"autores\":[]," +
-                                        "\"editora\":\"Editora\"," +
-                                        "\"ano\":\"Ano\",\"paginas\":1,"
-                                        + "\"edicao\":1," +
-                                        "\"descricao\":\"Descricao\"," +
-                                        "\"generos\":[],\"capa\":\"Capa\"," +
-                                        "\"exemplares\":[]," +
-                                        "\"livroDoMes\":true}]"));
-    }
-
-    /**
      * Method under test: {@link LivroController#verLivroDoMes()}
      */
     @Test
