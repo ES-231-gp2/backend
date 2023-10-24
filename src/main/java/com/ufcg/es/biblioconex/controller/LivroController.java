@@ -88,12 +88,12 @@ public class LivroController {
                 .body(livroService.adicionarExemplares(id, numeroExemplares));
     }
 
-    @PutMapping("/livro-do-mes/{id}")
+    @PutMapping("/livro-do-mes/{isbm}")
     public ResponseEntity<?> atualizarLivroDoMes(
-            @PathVariable Long id) {
+            @PathVariable String isbm) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(livroService.atualizarLivroDoMes(id));
+                .body(livroService.atualizarLivroDoMes(isbm));
     }
 
     @GetMapping("/livro-do-mes")

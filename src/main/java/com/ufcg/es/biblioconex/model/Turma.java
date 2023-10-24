@@ -28,4 +28,9 @@ public class Turma {
 
     @JsonProperty("professor_id")
     private Long professor;
+
+    @JsonProperty("texto")
+    @ManyToOne
+    @JoinColumn(name = "texto_id")
+    private Texto texto;
 }
