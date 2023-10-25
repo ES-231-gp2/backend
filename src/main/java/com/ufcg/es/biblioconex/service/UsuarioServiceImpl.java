@@ -12,20 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService{
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public Usuario login(String email, String senha) {
         Usuario usuario = this.usuarioRepository.findByEmail(email);
         if (usuario == null) {
             throw new UsuarioNaoEncontradoException();
-        }else{
-            if(!usuario.getSenha().equals(senha)){
+        } else {
+            if (!usuario.getSenha().equals(senha)) {
                 throw new SenhaIncorretaException();
             }
         }
@@ -36,7 +36,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     public Usuario cadastrarUsuario(String login, String senha, UsuarioDTO usuarioDTO) {
         Usuario usuario = this.login(login, senha);
 
-        if (!usuario.getTipoUsuario().equals(TipoUsuarioEnum.BIBLIOTECARIO)){
+        if (!usuario.getTipoUsuario().equals(TipoUsuarioEnum.BIBLIOTECARIO)) {
             throw new UsuarioNaoAutorizadoException();
         }
 

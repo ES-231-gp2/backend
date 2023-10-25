@@ -1,6 +1,5 @@
 package com.ufcg.es.biblioconex.controller;
 
-import com.ufcg.es.biblioconex.dto.LivroDTO;
 import com.ufcg.es.biblioconex.dto.UsuarioDTO;
 import com.ufcg.es.biblioconex.service.UsuarioService;
 import jakarta.validation.Valid;
