@@ -26,6 +26,10 @@ public class Turma {
     @Enumerated(EnumType.STRING)
     private SerieEnum serie;
 
+    @JsonProperty("sala")
+    @Column(nullable = false)
+    private String sala;
+
     @JsonProperty("professor_id")
     private Long professor;
 }

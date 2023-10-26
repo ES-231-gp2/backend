@@ -22,6 +22,9 @@ public class TurmaDTO {
     @Enumerated(EnumType.STRING)
     private SerieEnum serie;
 
+    @JsonProperty("sala")
+    private String sala;
+
     @JsonProperty("professor_id")
     private Long professor;
 
