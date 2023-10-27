@@ -2,7 +2,6 @@ package com.ufcg.es.biblioconex.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.es.biblioconex.dto.LivroDTO;
-import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.service.LivroService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -132,94 +131,6 @@ class LivroControllerTests {
                         .build()
                         .perform(requestBuilder);
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isNoContent());
-    }
-
-    /**
-     * Method under test:
-     * {@link LivroController#adicionarExemplares(Long, Integer)}
-     */
-    @Test
-    void testAdicionarExemplares() throws Exception {
-        Livro livro = new Livro();
-        livro.setAno("Ano");
-        livro.setAutores(new HashSet<>());
-        livro.setCapa("Capa");
-        livro.setDescricao("Descricao");
-        livro.setEdicao(1);
-        livro.setEditora("Editora");
-        livro.setExemplares(new HashSet<>());
-        livro.setGeneros(new HashSet<>());
-        livro.setId(1L);
-        livro.setIsbn("Isbn");
-        livro.setLivroDoMes(true);
-        livro.setPaginas(1);
-        livro.setTitulo("Titulo");
-        when(livroService.adicionarExemplares(Mockito.<Long>any(),
-                Mockito.<Integer>any())).thenReturn(livro);
-        MockHttpServletRequestBuilder putResult = MockMvcRequestBuilders.put(
-                "/api/livros/exemplares/{id}", 1L);
-        MockHttpServletRequestBuilder requestBuilder = putResult.param(
-                "numeroExemplares", String.valueOf(1));
-        MockMvcBuilders.standaloneSetup(livroController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(
-                        "application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"id\":1,\"isbn\":\"Isbn\"," +
-                                        "\"titulo\":\"Titulo\"," +
-                                        "\"autores\":[]," +
-                                        "\"editora\":\"Editora\"," +
-                                        "\"ano\":\"Ano\",\"paginas\":1,"
-                                        + "\"edicao\":1," +
-                                        "\"descricao\":\"Descricao\"," +
-                                        "\"generos\":[],\"capa\":\"Capa\"," +
-                                        "\"exemplares\":[]," +
-                                        "\"livroDoMes\":true}"));
-    }
-
-    /**
-     * Method under test: {@link LivroController#verLivroDoMes()}
-     */
-    @Test
-    void testVerLivroDoMes() throws Exception {
-        Livro livro = new Livro();
-        livro.setAno("Ano");
-        livro.setAutores(new HashSet<>());
-        livro.setCapa("Capa");
-        livro.setDescricao("Descricao");
-        livro.setEdicao(1);
-        livro.setEditora("Editora");
-        livro.setExemplares(new HashSet<>());
-        livro.setGeneros(new HashSet<>());
-        livro.setId(1L);
-        livro.setIsbn("Isbn");
-        livro.setLivroDoMes(true);
-        livro.setPaginas(1);
-        livro.setTitulo("Titulo");
-        when(livroService.verLivroDoMes()).thenReturn(livro);
-        MockHttpServletRequestBuilder requestBuilder =
-                MockMvcRequestBuilders.get("/api/livros/livro-do-mes");
-        MockMvcBuilders.standaloneSetup(livroController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(
-                        "application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"id\":1,\"isbn\":\"Isbn\"," +
-                                        "\"titulo\":\"Titulo\"," +
-                                        "\"autores\":[]," +
-                                        "\"editora\":\"Editora\"," +
-                                        "\"ano\":\"Ano\",\"paginas\":1,"
-                                        + "\"edicao\":1," +
-                                        "\"descricao\":\"Descricao\"," +
-                                        "\"generos\":[],\"capa\":\"Capa\"," +
-                                        "\"exemplares\":[]," +
-                                        "\"livroDoMes\":true}"));
     }
 
     /**

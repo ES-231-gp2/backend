@@ -24,9 +24,6 @@ public class Turma {
     @Column(nullable = false)
     private String serie;
 
-    @JsonProperty("professor_id")
-    private Long professor;
-
     @JsonProperty("texto")
     @ManyToOne
     @JoinColumn(name = "texto_id")
