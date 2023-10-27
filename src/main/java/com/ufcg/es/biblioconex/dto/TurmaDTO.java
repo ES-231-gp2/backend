@@ -1,9 +1,6 @@
 package com.ufcg.es.biblioconex.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.es.biblioconex.enums.SerieEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,11 +16,7 @@ import java.util.Set;
 public class TurmaDTO {
 
     @JsonProperty("serie")
-    @Enumerated(EnumType.STRING)
-    private SerieEnum serie;
-
-    @JsonProperty("sala")
-    private String sala;
+    private String serie;
 
     @JsonProperty("professor_id")
     private Long professor;

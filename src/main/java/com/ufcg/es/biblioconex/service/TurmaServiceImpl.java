@@ -33,7 +33,6 @@ public class TurmaServiceImpl implements TurmaService {
         Turma turma = Turma.builder()
                 .serie(turmaDTO.getSerie())
                 .professor(turmaDTO.getProfessor())
-                .sala(turmaDTO.getSala())
                 .build();
         turma = turmaRepository.save(turma);
 
@@ -57,7 +56,6 @@ public class TurmaServiceImpl implements TurmaService {
         Turma turma = turmaRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
         turma.setProfessor(turmaDTO.getProfessor());
         turma.setSerie(turmaDTO.getSerie());
-        turma.setSala(turmaDTO.getSala());
 
         mapeiaAlunos(turma, turmaDTO.getAlunosId());
 
