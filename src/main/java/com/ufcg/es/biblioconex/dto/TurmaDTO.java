@@ -19,7 +19,7 @@ public class TurmaDTO {
     private String serie;
 
     @JsonProperty("professor_id")
-    private Long professor;
+    private Long professorId;
 
     @JsonProperty("alunos_id")
     @Builder.Default

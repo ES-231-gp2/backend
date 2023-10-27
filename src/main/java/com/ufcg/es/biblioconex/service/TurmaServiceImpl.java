@@ -2,11 +2,9 @@ package com.ufcg.es.biblioconex.service;
 
 import com.ufcg.es.biblioconex.dto.TurmaDTO;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
-import com.ufcg.es.biblioconex.model.Aluno;
-import com.ufcg.es.biblioconex.model.Texto;
-import com.ufcg.es.biblioconex.model.Turma;
-import com.ufcg.es.biblioconex.model.TurmaAluno;
+import com.ufcg.es.biblioconex.model.*;
 import com.ufcg.es.biblioconex.repository.TurmaAlunoRepository;
+import com.ufcg.es.biblioconex.repository.TurmaProfessorRepository;
 import com.ufcg.es.biblioconex.repository.TurmaRepository;
 import com.ufcg.es.biblioconex.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -25,17 +23,26 @@ public class TurmaServiceImpl implements TurmaService {
     @Autowired
     UsuarioRepository usuarioRepository;
     @Autowired
+    TurmaProfessorRepository turmaProfessorRepository;
+    @Autowired
     TurmaAlunoRepository turmaAlunoRepository;
     @Autowired
     ModelMapper modelMapper;
 
     @Override
     public Turma cadastrarTurma(TurmaDTO turmaDTO) {
+        Professor professor =
+                (Professor) usuarioRepository.findById(turmaDTO.getProfessorId()).orElseThrow(ObjetoNaoExisteException::new);
+
         Turma turma = Turma.builder()
                 .serie(turmaDTO.getSerie())
-                .professor(turmaDTO.getProfessor())
                 .build();
         turma = turmaRepository.save(turma);
+
+        turmaProfessorRepository.save(TurmaProfessor.builder()
+                .turma(turma)
+                .professor(professor)
+                .build());
 
         mapeiaAlunos(turma, turmaDTO.getAlunosId());
 
@@ -55,7 +62,6 @@ public class TurmaServiceImpl implements TurmaService {
     @Override
     public Turma alterarTurma(Long id, TurmaDTO turmaDTO) {
         Turma turma = turmaRepository.findById(id).orElseThrow(ObjetoNaoExisteException::new);
-        turma.setProfessor(turmaDTO.getProfessor());
         turma.setSerie(turmaDTO.getSerie());
 
         mapeiaAlunos(turma, turmaDTO.getAlunosId());

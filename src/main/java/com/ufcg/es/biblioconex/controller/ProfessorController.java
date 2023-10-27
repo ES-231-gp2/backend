@@ -1,7 +1,7 @@
 package com.ufcg.es.biblioconex.controller;
 
-import com.ufcg.es.biblioconex.dto.AlunoDTO;
-import com.ufcg.es.biblioconex.service.AlunoService;
+import com.ufcg.es.biblioconex.dto.ProfessorDTO;
+import com.ufcg.es.biblioconex.service.ProfessorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,51 +11,51 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(
-        value = "/api/alunos",
+        value = "/api/professores",
         produces = MediaType.APPLICATION_JSON_VALUE
 )
-public class AlunoController {
+public class ProfessorController {
 
     @Autowired
-    AlunoService alunoService;
+    ProfessorService professorService;
 
     @PostMapping()
-    public ResponseEntity<?> cadastrarAluno(
-            @RequestBody @Valid AlunoDTO alunoDTO) {
+    public ResponseEntity<?> cadastrarProfessor(
+            @RequestBody @Valid ProfessorDTO professorDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(alunoService.cadastrarAluno(alunoDTO));
+                .body(professorService.cadastrarProfessor(professorDTO));
     }
 
     @GetMapping()
-    public ResponseEntity<?> buscarAlunos() {
+    public ResponseEntity<?> buscarProfessores() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(alunoService.buscarAlunos(null));
+                .body(professorService.buscarProfessores(null));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarAluno(
+    public ResponseEntity<?> buscarProfessor(
             @PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(alunoService.buscarAlunos(id));
+                .body(professorService.buscarProfessores(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> alterarAluno(
+    public ResponseEntity<?> alterarProfessor(
             @PathVariable Long id,
-            @RequestBody @Valid AlunoDTO alunoDTO) {
+            @RequestBody @Valid ProfessorDTO professorDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(alunoService.alterarAluno(id, alunoDTO));
+                .body(professorService.alterarProfessor(id, professorDTO));
     }
 
     @GetMapping("/{id}/turma")
-    public ResponseEntity<?> buscarTurmaAluno(
+    public ResponseEntity<?> buscarTurmaProfessor(
             @PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(alunoService.buscarTurmaAluno(id));
+                .body(professorService.buscarTurmasProfessor(id));
     }
 }
