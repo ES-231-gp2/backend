@@ -1,7 +1,6 @@
 package com.ufcg.es.biblioconex.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.es.biblioconex.enums.SerieEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +22,7 @@ public class Turma {
 
     @JsonProperty("serie")
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SerieEnum serie;
+    private String serie;
 
     @JsonProperty("professor_id")
     private Long professor;
