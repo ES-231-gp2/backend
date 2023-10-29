@@ -92,4 +92,11 @@ public class TurmaServiceImpl implements TurmaService {
                     .build());
         }
     }
+
+    @Override
+    public Texto alterarTexto(Long turmaId, Texto texto) {
+        Turma turma = turmaRepository.findById(turmaId).orElseThrow(ObjetoNaoExisteException::new);
+        turma.setTexto(texto);
+        return turmaRepository.save(turma).getTexto();
+    }
 }

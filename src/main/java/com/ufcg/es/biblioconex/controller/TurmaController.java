@@ -1,6 +1,7 @@
 package com.ufcg.es.biblioconex.controller;
 
 import com.ufcg.es.biblioconex.dto.TurmaDTO;
+import com.ufcg.es.biblioconex.model.Texto;
 import com.ufcg.es.biblioconex.service.TurmaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +66,14 @@ public class TurmaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(turmaService.visualizarTexto(id));
+    }
+
+    @PutMapping("/texto/adiciona/{id}")
+    public ResponseEntity<?> adicionarTextoTurma(
+            @PathVariable Long id,
+            @RequestBody @Valid Texto texto) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(turmaService.alterarTexto(id, texto));
     }
 }

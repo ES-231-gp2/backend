@@ -18,4 +18,6 @@ public interface TurmaService {
     List<Aluno> buscarAlunosTurma(Long id);
 
     Texto visualizarTexto(Long turmaId);
+
+    Texto alterarTexto(Long turmaId, Texto texto);
 }
