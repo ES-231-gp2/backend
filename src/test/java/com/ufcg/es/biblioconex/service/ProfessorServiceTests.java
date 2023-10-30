@@ -40,7 +40,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {ProfessorServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class ProfessorServiceTest {
+class ProfessorServiceTests {
     @Autowired
     private ProfessorServiceImpl professorServiceImpl;
 

@@ -1,35 +1,13 @@
 package com.ufcg.es.biblioconex.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.ufcg.es.biblioconex.dto.TurmaDTO;
 import com.ufcg.es.biblioconex.enums.TipoUsuarioEnum;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
-import com.ufcg.es.biblioconex.model.Aluno;
-import com.ufcg.es.biblioconex.model.Professor;
-import com.ufcg.es.biblioconex.model.Texto;
-import com.ufcg.es.biblioconex.model.Turma;
-import com.ufcg.es.biblioconex.model.TurmaAluno;
-import com.ufcg.es.biblioconex.model.TurmaProfessor;
-import com.ufcg.es.biblioconex.model.Usuario;
+import com.ufcg.es.biblioconex.model.*;
 import com.ufcg.es.biblioconex.repository.TurmaAlunoRepository;
 import com.ufcg.es.biblioconex.repository.TurmaProfessorRepository;
 import com.ufcg.es.biblioconex.repository.TurmaRepository;
 import com.ufcg.es.biblioconex.repository.UsuarioRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -39,9 +17,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @ContextConfiguration(classes = {TurmaServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class TurmaServiceTest {
+class TurmaServiceTests {
     @MockBean
     private ModelMapper modelMapper;
 
@@ -87,7 +72,7 @@ class TurmaServiceTest {
         turmaProfessor.setId(1L);
         turmaProfessor.setProfessor(professor);
         turmaProfessor.setTurma(turma);
-        when(turmaProfessorRepository.save(Mockito.<TurmaProfessor>any())).thenReturn(turmaProfessor);
+        when(turmaProfessorRepository.save(Mockito.any())).thenReturn(turmaProfessor);
 
         Texto texto2 = new Texto();
         texto2.setConteudo("Conteudo");
@@ -99,7 +84,7 @@ class TurmaServiceTest {
         turma2.setId(1L);
         turma2.setSerie("Serie");
         turma2.setTexto(texto2);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma2);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma2);
 
         Professor professor2 = new Professor();
         professor2.setEmail("jane.doe@example.org");
@@ -116,8 +101,8 @@ class TurmaServiceTest {
         when(usuarioRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         Turma actualCadastrarTurmaResult = turmaServiceImpl.cadastrarTurma(new TurmaDTO());
         verify(usuarioRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
-        verify(turmaProfessorRepository).save(Mockito.<TurmaProfessor>any());
+        verify(turmaRepository).save(Mockito.any());
+        verify(turmaProfessorRepository).save(Mockito.any());
         assertSame(turma2, actualCadastrarTurmaResult);
     }
 
@@ -148,8 +133,8 @@ class TurmaServiceTest {
         turmaProfessor.setId(1L);
         turmaProfessor.setProfessor(professor);
         turmaProfessor.setTurma(turma);
-        when(turmaProfessorRepository.save(Mockito.<TurmaProfessor>any())).thenReturn(turmaProfessor);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenThrow(new ObjetoNaoExisteException());
+        when(turmaProfessorRepository.save(Mockito.any())).thenReturn(turmaProfessor);
+        when(turmaRepository.save(Mockito.any())).thenThrow(new ObjetoNaoExisteException());
 
         Professor professor2 = new Professor();
         professor2.setEmail("jane.doe@example.org");
@@ -166,7 +151,7 @@ class TurmaServiceTest {
         when(usuarioRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         assertThrows(ObjetoNaoExisteException.class, () -> turmaServiceImpl.cadastrarTurma(new TurmaDTO()));
         verify(usuarioRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
     }
 
     /**
@@ -174,7 +159,7 @@ class TurmaServiceTest {
      */
     @Test
     void testCadastrarTurma3() {
-        when(turmaProfessorRepository.save(Mockito.<TurmaProfessor>any())).thenThrow(new ObjetoNaoExisteException());
+        when(turmaProfessorRepository.save(Mockito.any())).thenThrow(new ObjetoNaoExisteException());
 
         Texto texto = new Texto();
         texto.setConteudo("Conteudo");
@@ -186,7 +171,7 @@ class TurmaServiceTest {
         turma.setId(1L);
         turma.setSerie("Serie");
         turma.setTexto(texto);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma);
 
         Professor professor = new Professor();
         professor.setEmail("jane.doe@example.org");
@@ -204,8 +189,8 @@ class TurmaServiceTest {
         assertThrows(ObjetoNaoExisteException.class,
                 () -> turmaServiceImpl.cadastrarTurma(TurmaDTO.builder().professorId(1L).serie("Serie").build()));
         verify(usuarioRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
-        verify(turmaProfessorRepository).save(Mockito.<TurmaProfessor>any());
+        verify(turmaRepository).save(Mockito.any());
+        verify(turmaProfessorRepository).save(Mockito.any());
     }
 
     /**
@@ -280,11 +265,11 @@ class TurmaServiceTest {
         turma2.setId(1L);
         turma2.setSerie("Serie");
         turma2.setTexto(texto2);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma2);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma2);
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         Turma actualAlterarTurmaResult = turmaServiceImpl.alterarTurma(1L, new TurmaDTO());
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
         assertSame(turma2, actualAlterarTurmaResult);
     }
 
@@ -304,11 +289,11 @@ class TurmaServiceTest {
         turma.setSerie("Serie");
         turma.setTexto(texto);
         Optional<Turma> ofResult = Optional.of(turma);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenThrow(new ObjetoNaoExisteException());
+        when(turmaRepository.save(Mockito.any())).thenThrow(new ObjetoNaoExisteException());
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         assertThrows(ObjetoNaoExisteException.class, () -> turmaServiceImpl.alterarTurma(1L, new TurmaDTO()));
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
     }
 
     /**
@@ -323,8 +308,8 @@ class TurmaServiceTest {
         texto.setResumo("Resumo");
         Turma turma = mock(Turma.class);
         doNothing().when(turma).setId(Mockito.<Long>any());
-        doNothing().when(turma).setSerie(Mockito.<String>any());
-        doNothing().when(turma).setTexto(Mockito.<Texto>any());
+        doNothing().when(turma).setSerie(Mockito.any());
+        doNothing().when(turma).setTexto(Mockito.any());
         turma.setId(1L);
         turma.setSerie("Serie");
         turma.setTexto(texto);
@@ -340,14 +325,14 @@ class TurmaServiceTest {
         turma2.setId(1L);
         turma2.setSerie("Serie");
         turma2.setTexto(texto2);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma2);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma2);
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         Turma actualAlterarTurmaResult = turmaServiceImpl.alterarTurma(1L, new TurmaDTO());
         verify(turma).setId(Mockito.<Long>any());
-        verify(turma, atLeast(1)).setSerie(Mockito.<String>any());
-        verify(turma).setTexto(Mockito.<Texto>any());
+        verify(turma, atLeast(1)).setSerie(Mockito.any());
+        verify(turma).setTexto(Mockito.any());
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
         assertSame(turma2, actualAlterarTurmaResult);
     }
 
@@ -510,8 +495,8 @@ class TurmaServiceTest {
         Turma turma = mock(Turma.class);
         when(turma.getTexto()).thenReturn(texto2);
         doNothing().when(turma).setId(Mockito.<Long>any());
-        doNothing().when(turma).setSerie(Mockito.<String>any());
-        doNothing().when(turma).setTexto(Mockito.<Texto>any());
+        doNothing().when(turma).setSerie(Mockito.any());
+        doNothing().when(turma).setTexto(Mockito.any());
         turma.setId(1L);
         turma.setSerie("Serie");
         turma.setTexto(texto);
@@ -520,8 +505,8 @@ class TurmaServiceTest {
         Texto actualVisualizarTextoResult = turmaServiceImpl.visualizarTexto(1L);
         verify(turma).getTexto();
         verify(turma).setId(Mockito.<Long>any());
-        verify(turma).setSerie(Mockito.<String>any());
-        verify(turma).setTexto(Mockito.<Texto>any());
+        verify(turma).setSerie(Mockito.any());
+        verify(turma).setTexto(Mockito.any());
         verify(turmaRepository).findById(Mockito.<Long>any());
         assertSame(texto2, actualVisualizarTextoResult);
     }
@@ -553,7 +538,7 @@ class TurmaServiceTest {
         turma2.setId(1L);
         turma2.setSerie("Serie");
         turma2.setTexto(texto2);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma2);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma2);
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
         Texto texto3 = new Texto();
@@ -563,7 +548,7 @@ class TurmaServiceTest {
         texto3.setResumo("Resumo");
         Texto actualAlterarTextoResult = turmaServiceImpl.alterarTexto(1L, texto3);
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
         assertSame(texto2, actualAlterarTextoResult);
     }
 
@@ -583,7 +568,7 @@ class TurmaServiceTest {
         turma.setSerie("Serie");
         turma.setTexto(texto);
         Optional<Turma> ofResult = Optional.of(turma);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenThrow(new ObjetoNaoExisteException());
+        when(turmaRepository.save(Mockito.any())).thenThrow(new ObjetoNaoExisteException());
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
         Texto texto2 = new Texto();
@@ -593,7 +578,7 @@ class TurmaServiceTest {
         texto2.setResumo("Resumo");
         assertThrows(ObjetoNaoExisteException.class, () -> turmaServiceImpl.alterarTexto(1L, texto2));
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
     }
 
     /**
@@ -627,12 +612,12 @@ class TurmaServiceTest {
         Turma turma2 = mock(Turma.class);
         when(turma2.getTexto()).thenReturn(texto3);
         doNothing().when(turma2).setId(Mockito.<Long>any());
-        doNothing().when(turma2).setSerie(Mockito.<String>any());
-        doNothing().when(turma2).setTexto(Mockito.<Texto>any());
+        doNothing().when(turma2).setSerie(Mockito.any());
+        doNothing().when(turma2).setTexto(Mockito.any());
         turma2.setId(1L);
         turma2.setSerie("Serie");
         turma2.setTexto(texto2);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma2);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma2);
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
         Texto texto4 = new Texto();
@@ -643,10 +628,10 @@ class TurmaServiceTest {
         Texto actualAlterarTextoResult = turmaServiceImpl.alterarTexto(1L, texto4);
         verify(turma2).getTexto();
         verify(turma2).setId(Mockito.<Long>any());
-        verify(turma2).setSerie(Mockito.<String>any());
-        verify(turma2).setTexto(Mockito.<Texto>any());
+        verify(turma2).setSerie(Mockito.any());
+        verify(turma2).setTexto(Mockito.any());
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
         assertSame(texto3, actualAlterarTextoResult);
     }
 
@@ -662,8 +647,8 @@ class TurmaServiceTest {
         texto.setResumo("Resumo");
         Turma turma = mock(Turma.class);
         doNothing().when(turma).setId(Mockito.<Long>any());
-        doNothing().when(turma).setSerie(Mockito.<String>any());
-        doNothing().when(turma).setTexto(Mockito.<Texto>any());
+        doNothing().when(turma).setSerie(Mockito.any());
+        doNothing().when(turma).setTexto(Mockito.any());
         turma.setId(1L);
         turma.setSerie("Serie");
         turma.setTexto(texto);
@@ -683,12 +668,12 @@ class TurmaServiceTest {
         Turma turma2 = mock(Turma.class);
         when(turma2.getTexto()).thenReturn(texto3);
         doNothing().when(turma2).setId(Mockito.<Long>any());
-        doNothing().when(turma2).setSerie(Mockito.<String>any());
-        doNothing().when(turma2).setTexto(Mockito.<Texto>any());
+        doNothing().when(turma2).setSerie(Mockito.any());
+        doNothing().when(turma2).setTexto(Mockito.any());
         turma2.setId(1L);
         turma2.setSerie("Serie");
         turma2.setTexto(texto2);
-        when(turmaRepository.save(Mockito.<Turma>any())).thenReturn(turma2);
+        when(turmaRepository.save(Mockito.any())).thenReturn(turma2);
         when(turmaRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
         Texto texto4 = new Texto();
@@ -700,12 +685,12 @@ class TurmaServiceTest {
         verify(turma2).getTexto();
         verify(turma2).setId(Mockito.<Long>any());
         verify(turma).setId(Mockito.<Long>any());
-        verify(turma2).setSerie(Mockito.<String>any());
-        verify(turma).setSerie(Mockito.<String>any());
-        verify(turma2).setTexto(Mockito.<Texto>any());
-        verify(turma, atLeast(1)).setTexto(Mockito.<Texto>any());
+        verify(turma2).setSerie(Mockito.any());
+        verify(turma).setSerie(Mockito.any());
+        verify(turma2).setTexto(Mockito.any());
+        verify(turma, atLeast(1)).setTexto(Mockito.any());
         verify(turmaRepository).findById(Mockito.<Long>any());
-        verify(turmaRepository).save(Mockito.<Turma>any());
+        verify(turmaRepository).save(Mockito.any());
         assertSame(texto3, actualAlterarTextoResult);
     }
 }

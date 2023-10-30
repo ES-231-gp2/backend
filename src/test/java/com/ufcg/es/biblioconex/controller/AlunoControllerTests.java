@@ -1,7 +1,5 @@
 package com.ufcg.es.biblioconex.controller;
 
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.es.biblioconex.dto.AlunoDTO;
 import com.ufcg.es.biblioconex.enums.TipoUsuarioEnum;
@@ -9,9 +7,6 @@ import com.ufcg.es.biblioconex.model.Aluno;
 import com.ufcg.es.biblioconex.model.Texto;
 import com.ufcg.es.biblioconex.model.Turma;
 import com.ufcg.es.biblioconex.service.AlunoService;
-
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -25,9 +20,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.when;
+
 @ContextConfiguration(classes = {AlunoController.class})
 @ExtendWith(SpringExtension.class)
-class AlunoControllerTest {
+class AlunoControllerTests {
     @Autowired
     private AlunoController alunoController;
 
@@ -60,7 +59,7 @@ class AlunoControllerTest {
         aluno.setNome("Nome");
         aluno.setSenha("Senha");
         aluno.setTipoUsuario(TipoUsuarioEnum.ALUNO);
-        when(alunoService.alterarAluno(Mockito.<Long>any(), Mockito.<AlunoDTO>any())).thenReturn(aluno);
+        when(alunoService.alterarAluno(Mockito.<Long>any(), Mockito.any())).thenReturn(aluno);
 
         AlunoDTO alunoDTO = new AlunoDTO();
         alunoDTO.setEmail("jane.doe@example.org");
@@ -78,7 +77,8 @@ class AlunoControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "{\"id\":1,\"nome\":\"Nome\",\"email\":\"jane.doe@example.org\",\"senha\":\"Senha\",\"tipo_usuario\":\"ALUNO\"}"));
+                                "{\"id\":1,\"nome\":\"Nome\",\"email\":\"jane.doe@example.org\",\"senha\":\"Senha\"," +
+                                        "\"tipo_usuario\":\"ALUNO\"}"));
     }
 
     /**
@@ -105,7 +105,8 @@ class AlunoControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "{\"id\":1,\"serie\":\"Serie\",\"texto\":{\"id\":1,\"nome\":\"Nome\",\"resumo\":\"Resumo\",\"conteudo\":\"Conteudo\"}}"));
+                                "{\"id\":1,\"serie\":\"Serie\",\"texto\":{\"id\":1,\"nome\":\"Nome\"," +
+                                        "\"resumo\":\"Resumo\",\"conteudo\":\"Conteudo\"}}"));
     }
 
     /**

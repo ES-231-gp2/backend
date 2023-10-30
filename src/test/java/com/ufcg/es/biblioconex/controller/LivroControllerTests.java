@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ContextConfiguration(classes = {LivroController.class})
 @ExtendWith(SpringExtension.class)
-class LivroControllerTest {
+class LivroControllerTests {
     @Autowired
     private LivroController livroController;
 

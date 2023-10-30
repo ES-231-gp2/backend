@@ -1,15 +1,5 @@
 package com.ufcg.es.biblioconex.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.ufcg.es.biblioconex.dto.EmprestimoDTO;
 import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.enums.TipoUsuarioEnum;
@@ -21,14 +11,6 @@ import com.ufcg.es.biblioconex.model.Usuario;
 import com.ufcg.es.biblioconex.repository.EmprestimoRepository;
 import com.ufcg.es.biblioconex.repository.ExemplarRepository;
 import com.ufcg.es.biblioconex.repository.UsuarioRepository;
-
-import java.time.LocalDate;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -38,9 +20,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @ContextConfiguration(classes = {ExemplarServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class ExemplarServiceTest {
+class ExemplarServiceTests {
     @MockBean
     private EmprestimoRepository emprestimoRepository;
 
@@ -172,7 +163,7 @@ class ExemplarServiceTest {
         emprestimo2.setExemplar(exemplar2);
         emprestimo2.setId(1L);
         emprestimo2.setUsuario(usuario2);
-        when(emprestimoRepository.save(Mockito.<Emprestimo>any())).thenReturn(emprestimo2);
+        when(emprestimoRepository.save(Mockito.any())).thenReturn(emprestimo2);
         when(emprestimoRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
         Livro livro3 = new Livro();
@@ -197,11 +188,11 @@ class ExemplarServiceTest {
         exemplar3.setLivro(livro3);
         exemplar3.setNumero(10);
         exemplar3.setStatus(StatusExemplarEnum.DISPONIVEL);
-        when(exemplarRepository.save(Mockito.<Exemplar>any())).thenReturn(exemplar3);
+        when(exemplarRepository.save(Mockito.any())).thenReturn(exemplar3);
         Emprestimo actualRealizarDevolucaoResult = exemplarServiceImpl.realizarDevolucao(1L);
         verify(emprestimoRepository).findById(Mockito.<Long>any());
-        verify(emprestimoRepository).save(Mockito.<Emprestimo>any());
-        verify(exemplarRepository).save(Mockito.<Exemplar>any());
+        verify(emprestimoRepository).save(Mockito.any());
+        verify(exemplarRepository).save(Mockito.any());
         Exemplar exemplar4 = actualRealizarDevolucaoResult.getExemplar();
         assertEquals(2, exemplar4.getLivro().getLeituras().intValue());
         assertEquals(StatusExemplarEnum.DISPONIVEL, exemplar4.getStatus());
@@ -289,13 +280,13 @@ class ExemplarServiceTest {
         emprestimo2.setExemplar(exemplar2);
         emprestimo2.setId(1L);
         emprestimo2.setUsuario(usuario2);
-        when(emprestimoRepository.save(Mockito.<Emprestimo>any())).thenReturn(emprestimo2);
+        when(emprestimoRepository.save(Mockito.any())).thenReturn(emprestimo2);
         when(emprestimoRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
-        when(exemplarRepository.save(Mockito.<Exemplar>any())).thenThrow(new BiblioConexException("An error occurred"));
+        when(exemplarRepository.save(Mockito.any())).thenThrow(new BiblioConexException("An error occurred"));
         assertThrows(BiblioConexException.class, () -> exemplarServiceImpl.realizarDevolucao(1L));
         verify(emprestimoRepository).findById(Mockito.<Long>any());
-        verify(emprestimoRepository).save(Mockito.<Emprestimo>any());
-        verify(exemplarRepository).save(Mockito.<Exemplar>any());
+        verify(emprestimoRepository).save(Mockito.any());
+        verify(exemplarRepository).save(Mockito.any());
     }
 
     /**
@@ -357,12 +348,12 @@ class ExemplarServiceTest {
         exemplar2.setStatus(StatusExemplarEnum.DISPONIVEL);
         Emprestimo emprestimo = mock(Emprestimo.class);
         when(emprestimo.getExemplar()).thenReturn(exemplar2);
-        doNothing().when(emprestimo).setDataDevolucao(Mockito.<LocalDate>any());
-        doNothing().when(emprestimo).setDataDevolucaoPrevista(Mockito.<LocalDate>any());
-        doNothing().when(emprestimo).setDataEmprestimo(Mockito.<LocalDate>any());
-        doNothing().when(emprestimo).setExemplar(Mockito.<Exemplar>any());
+        doNothing().when(emprestimo).setDataDevolucao(Mockito.any());
+        doNothing().when(emprestimo).setDataDevolucaoPrevista(Mockito.any());
+        doNothing().when(emprestimo).setDataEmprestimo(Mockito.any());
+        doNothing().when(emprestimo).setExemplar(Mockito.any());
         doNothing().when(emprestimo).setId(Mockito.<Long>any());
-        doNothing().when(emprestimo).setUsuario(Mockito.<Usuario>any());
+        doNothing().when(emprestimo).setUsuario(Mockito.any());
         emprestimo.setDataDevolucao(LocalDate.of(1970, 1, 1));
         emprestimo.setDataDevolucaoPrevista(LocalDate.of(1970, 1, 1));
         emprestimo.setDataEmprestimo(LocalDate.of(1970, 1, 1));
@@ -408,7 +399,7 @@ class ExemplarServiceTest {
         emprestimo2.setExemplar(exemplar3);
         emprestimo2.setId(1L);
         emprestimo2.setUsuario(usuario2);
-        when(emprestimoRepository.save(Mockito.<Emprestimo>any())).thenReturn(emprestimo2);
+        when(emprestimoRepository.save(Mockito.any())).thenReturn(emprestimo2);
         when(emprestimoRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
         Livro livro4 = new Livro();
@@ -433,18 +424,18 @@ class ExemplarServiceTest {
         exemplar4.setLivro(livro4);
         exemplar4.setNumero(10);
         exemplar4.setStatus(StatusExemplarEnum.DISPONIVEL);
-        when(exemplarRepository.save(Mockito.<Exemplar>any())).thenReturn(exemplar4);
+        when(exemplarRepository.save(Mockito.any())).thenReturn(exemplar4);
         exemplarServiceImpl.realizarDevolucao(1L);
         verify(emprestimo).getExemplar();
-        verify(emprestimo, atLeast(1)).setDataDevolucao(Mockito.<LocalDate>any());
-        verify(emprestimo).setDataDevolucaoPrevista(Mockito.<LocalDate>any());
-        verify(emprestimo).setDataEmprestimo(Mockito.<LocalDate>any());
-        verify(emprestimo).setExemplar(Mockito.<Exemplar>any());
+        verify(emprestimo, atLeast(1)).setDataDevolucao(Mockito.any());
+        verify(emprestimo).setDataDevolucaoPrevista(Mockito.any());
+        verify(emprestimo).setDataEmprestimo(Mockito.any());
+        verify(emprestimo).setExemplar(Mockito.any());
         verify(emprestimo).setId(Mockito.<Long>any());
-        verify(emprestimo).setUsuario(Mockito.<Usuario>any());
+        verify(emprestimo).setUsuario(Mockito.any());
         verify(emprestimoRepository).findById(Mockito.<Long>any());
-        verify(emprestimoRepository).save(Mockito.<Emprestimo>any());
-        verify(exemplarRepository).save(Mockito.<Exemplar>any());
+        verify(emprestimoRepository).save(Mockito.any());
+        verify(exemplarRepository).save(Mockito.any());
     }
 
     /**
@@ -453,7 +444,7 @@ class ExemplarServiceTest {
     @Test
     void testConsultarHistorico() {
         ArrayList<Livro> livroList = new ArrayList<>();
-        when(emprestimoRepository.consultarHistorico(Mockito.<Usuario>any())).thenReturn(livroList);
+        when(emprestimoRepository.consultarHistorico(Mockito.any())).thenReturn(livroList);
 
         Usuario usuario = new Usuario();
         usuario.setEmail("jane.doe@example.org");
@@ -464,7 +455,7 @@ class ExemplarServiceTest {
         Optional<Usuario> ofResult = Optional.of(usuario);
         when(usuarioRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         List<Livro> actualConsultarHistoricoResult = exemplarServiceImpl.consultarHistorico(1L);
-        verify(emprestimoRepository).consultarHistorico(Mockito.<Usuario>any());
+        verify(emprestimoRepository).consultarHistorico(Mockito.any());
         verify(usuarioRepository).findById(Mockito.<Long>any());
         assertTrue(actualConsultarHistoricoResult.isEmpty());
         assertSame(livroList, actualConsultarHistoricoResult);
@@ -475,7 +466,7 @@ class ExemplarServiceTest {
      */
     @Test
     void testConsultarHistorico2() {
-        when(emprestimoRepository.consultarHistorico(Mockito.<Usuario>any()))
+        when(emprestimoRepository.consultarHistorico(Mockito.any()))
                 .thenThrow(new BiblioConexException("An error occurred"));
 
         Usuario usuario = new Usuario();
@@ -487,7 +478,7 @@ class ExemplarServiceTest {
         Optional<Usuario> ofResult = Optional.of(usuario);
         when(usuarioRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         assertThrows(BiblioConexException.class, () -> exemplarServiceImpl.consultarHistorico(1L));
-        verify(emprestimoRepository).consultarHistorico(Mockito.<Usuario>any());
+        verify(emprestimoRepository).consultarHistorico(Mockito.any());
         verify(usuarioRepository).findById(Mockito.<Long>any());
     }
 }

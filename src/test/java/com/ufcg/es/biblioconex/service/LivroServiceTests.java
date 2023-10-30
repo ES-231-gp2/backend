@@ -1,32 +1,11 @@
 package com.ufcg.es.biblioconex.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.ufcg.es.biblioconex.dto.LivroDTO;
 import com.ufcg.es.biblioconex.enums.StatusExemplarEnum;
 import com.ufcg.es.biblioconex.exception.ObjetoNaoExisteException;
 import com.ufcg.es.biblioconex.model.Exemplar;
 import com.ufcg.es.biblioconex.model.Livro;
 import com.ufcg.es.biblioconex.repository.LivroRepository;
-
-import java.util.ArrayList;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
-
-import org.junit.jupiter.api.Disabled;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -36,9 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @ContextConfiguration(classes = {LivroServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class LivroServiceTest {
+class LivroServiceTests {
     @MockBean
     private LivroRepository livroRepository;
 
@@ -68,7 +52,7 @@ class LivroServiceTest {
         livro.setLivroDoMes(true);
         livro.setPaginas(1);
         livro.setTitulo("Titulo");
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro);
 
         Livro livro2 = new Livro();
         livro2.setAno("Ano");
@@ -85,11 +69,11 @@ class LivroServiceTest {
         livro2.setLivroDoMes(true);
         livro2.setPaginas(1);
         livro2.setTitulo("Titulo");
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Livro>>any())).thenReturn(livro2);
+        when(modelMapper.map(Mockito.any(), Mockito.<Class<Livro>>any())).thenReturn(livro2);
         LivroDTO livroDTO = new LivroDTO();
         Livro actualCadastrarLivroResult = livroServiceImpl.cadastrarLivro(livroDTO, 10);
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Livro>>any());
-        verify(livroRepository, atLeast(1)).save(Mockito.<Livro>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Class<Livro>>any());
+        verify(livroRepository, atLeast(1)).save(Mockito.any());
         assertEquals("", livroDTO.getIsbn());
         assertSame(livro, actualCadastrarLivroResult);
     }
@@ -99,10 +83,10 @@ class LivroServiceTest {
      */
     @Test
     void testCadastrarLivro2() {
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Livro>>any()))
+        when(modelMapper.map(Mockito.any(), Mockito.<Class<Livro>>any()))
                 .thenThrow(new ObjetoNaoExisteException());
         assertThrows(ObjetoNaoExisteException.class, () -> livroServiceImpl.cadastrarLivro(new LivroDTO(), 10));
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Livro>>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Class<Livro>>any());
     }
 
     /**
@@ -125,7 +109,7 @@ class LivroServiceTest {
         livro.setLivroDoMes(true);
         livro.setPaginas(1);
         livro.setTitulo("Titulo");
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro);
 
         Livro livro2 = new Livro();
         livro2.setAno("Ano");
@@ -168,11 +152,11 @@ class LivroServiceTest {
         livro3.setLivroDoMes(true);
         livro3.setPaginas(1);
         livro3.setTitulo("Titulo");
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Livro>>any())).thenReturn(livro3);
+        when(modelMapper.map(Mockito.any(), Mockito.<Class<Livro>>any())).thenReturn(livro3);
         LivroDTO livroDTO = new LivroDTO();
         Livro actualCadastrarLivroResult = livroServiceImpl.cadastrarLivro(livroDTO, 10);
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Livro>>any());
-        verify(livroRepository, atLeast(1)).save(Mockito.<Livro>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Class<Livro>>any());
+        verify(livroRepository, atLeast(1)).save(Mockito.any());
         assertEquals("", livroDTO.getIsbn());
         assertSame(livro, actualCadastrarLivroResult);
     }
@@ -197,7 +181,7 @@ class LivroServiceTest {
         livro.setLivroDoMes(true);
         livro.setPaginas(1);
         livro.setTitulo("Titulo");
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro);
 
         Livro livro2 = new Livro();
         livro2.setAno("Ano");
@@ -214,14 +198,14 @@ class LivroServiceTest {
         livro2.setLivroDoMes(true);
         livro2.setPaginas(1);
         livro2.setTitulo("Titulo");
-        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<Livro>>any())).thenReturn(livro2);
+        when(modelMapper.map(Mockito.any(), Mockito.<Class<Livro>>any())).thenReturn(livro2);
         HashSet<String> autores = new HashSet<>();
         LivroDTO livroDTO = new LivroDTO("Isbn", "Titulo", autores, "Editora", "Ano", "Paginas", 1, "Descricao",
                 new HashSet<>(), "Capa");
 
         Livro actualCadastrarLivroResult = livroServiceImpl.cadastrarLivro(livroDTO, 10);
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<Livro>>any());
-        verify(livroRepository, atLeast(1)).save(Mockito.<Livro>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Class<Livro>>any());
+        verify(livroRepository, atLeast(1)).save(Mockito.any());
         assertEquals("Isbn", livroDTO.getIsbn());
         assertSame(livro, actualCadastrarLivroResult);
     }
@@ -295,9 +279,9 @@ class LivroServiceTest {
     @Test
     void testBuscarLivrosPorGenero() {
         ArrayList<Livro> livroList = new ArrayList<>();
-        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any())).thenReturn(livroList);
+        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.any())).thenReturn(livroList);
         List<Livro> actualBuscarLivrosPorGeneroResult = livroServiceImpl.buscarLivrosPorGenero(new HashSet<>());
-        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any());
+        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.any());
         assertTrue(actualBuscarLivrosPorGeneroResult.isEmpty());
         assertSame(livroList, actualBuscarLivrosPorGeneroResult);
     }
@@ -308,12 +292,12 @@ class LivroServiceTest {
     @Test
     void testBuscarLivrosPorGenero2() {
         ArrayList<Livro> livroList = new ArrayList<>();
-        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any())).thenReturn(livroList);
+        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.any())).thenReturn(livroList);
 
         HashSet<String> generos = new HashSet<>();
         generos.add("foo");
         List<Livro> actualBuscarLivrosPorGeneroResult = livroServiceImpl.buscarLivrosPorGenero(generos);
-        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any());
+        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.any());
         assertTrue(actualBuscarLivrosPorGeneroResult.isEmpty());
         assertSame(livroList, actualBuscarLivrosPorGeneroResult);
     }
@@ -324,13 +308,13 @@ class LivroServiceTest {
     @Test
     void testBuscarLivrosPorGenero3() {
         ArrayList<Livro> livroList = new ArrayList<>();
-        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any())).thenReturn(livroList);
+        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.any())).thenReturn(livroList);
 
         HashSet<String> generos = new HashSet<>();
         generos.add("42");
         generos.add("foo");
         List<Livro> actualBuscarLivrosPorGeneroResult = livroServiceImpl.buscarLivrosPorGenero(generos);
-        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any());
+        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.any());
         assertTrue(actualBuscarLivrosPorGeneroResult.isEmpty());
         assertSame(livroList, actualBuscarLivrosPorGeneroResult);
     }
@@ -340,28 +324,10 @@ class LivroServiceTest {
      */
     @Test
     void testBuscarLivrosPorGenero4() {
-        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any()))
+        when(livroRepository.findByGenerosInOrderByTituloAsc(Mockito.any()))
                 .thenThrow(new ObjetoNaoExisteException());
         assertThrows(ObjetoNaoExisteException.class, () -> livroServiceImpl.buscarLivrosPorGenero(new HashSet<>()));
-        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.<Set<String>>any());
-    }
-
-    /**
-     * Method under test: {@link LivroServiceImpl#buscarLivroPorIsbn(String)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testBuscarLivroPorIsbn() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.IllegalArgumentException: Not enough variable values available to expand 'google.api.url'
-        //       at com.ufcg.es.biblioconex.utils.HttpClient.getHttpResponse(HttpClient.java:9)
-        //       at com.ufcg.es.biblioconex.service.LivroServiceImpl.buscarLivroPorIsbn(LivroServiceImpl.java:71)
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        livroServiceImpl.buscarLivroPorIsbn("Isbn");
+        verify(livroRepository).findByGenerosInOrderByTituloAsc(Mockito.any());
     }
 
     /**
@@ -401,13 +367,13 @@ class LivroServiceTest {
         livro2.setLivroDoMes(true);
         livro2.setPaginas(1);
         livro2.setTitulo("Titulo");
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro2);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro2);
         when(livroRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
-        doNothing().when(modelMapper).map(Mockito.<Object>any(), Mockito.<Object>any());
+        doNothing().when(modelMapper).map(Mockito.any(), Mockito.<Object>any());
         Livro actualAtualizarLivroResult = livroServiceImpl.atualizarLivro(1L, new LivroDTO());
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Object>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Object>any());
         verify(livroRepository).findById(Mockito.<Long>any());
-        verify(livroRepository).save(Mockito.<Livro>any());
+        verify(livroRepository).save(Mockito.any());
         assertSame(livro2, actualAtualizarLivroResult);
     }
 
@@ -433,9 +399,9 @@ class LivroServiceTest {
         livro.setTitulo("Titulo");
         Optional<Livro> ofResult = Optional.of(livro);
         when(livroRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
-        doThrow(new ObjetoNaoExisteException()).when(modelMapper).map(Mockito.<Object>any(), Mockito.<Object>any());
+        doThrow(new ObjetoNaoExisteException()).when(modelMapper).map(Mockito.any(), Mockito.<Object>any());
         assertThrows(ObjetoNaoExisteException.class, () -> livroServiceImpl.atualizarLivro(1L, new LivroDTO()));
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Object>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Object>any());
         verify(livroRepository).findById(Mockito.<Long>any());
     }
 
@@ -460,9 +426,9 @@ class LivroServiceTest {
         livro.setPaginas(1);
         livro.setTitulo("Titulo");
         Optional<Livro> ofResult = Optional.of(livro);
-        when(livroRepository.save(Mockito.<Livro>any())).thenThrow(new ObjetoNaoExisteException());
+        when(livroRepository.save(Mockito.any())).thenThrow(new ObjetoNaoExisteException());
         when(livroRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
-        doNothing().when(modelMapper).map(Mockito.<Object>any(), Mockito.<Object>any());
+        doNothing().when(modelMapper).map(Mockito.any(), Mockito.<Object>any());
         assertThrows(ObjetoNaoExisteException.class,
                 () -> livroServiceImpl.atualizarLivro(1L,
                         LivroDTO.builder()
@@ -474,9 +440,9 @@ class LivroServiceTest {
                                 .paginas("Paginas")
                                 .titulo("Titulo")
                                 .build()));
-        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Object>any());
+        verify(modelMapper).map(Mockito.any(), Mockito.<Object>any());
         verify(livroRepository).findById(Mockito.<Long>any());
-        verify(livroRepository).save(Mockito.<Livro>any());
+        verify(livroRepository).save(Mockito.any());
     }
 
     /**
@@ -536,11 +502,11 @@ class LivroServiceTest {
         livro2.setLivroDoMes(true);
         livro2.setPaginas(1);
         livro2.setTitulo("Titulo");
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro2);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro2);
         when(livroRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         Livro actualAdicionarExemplaresResult = livroServiceImpl.adicionarExemplares(1L, 10);
         verify(livroRepository).findById(Mockito.<Long>any());
-        verify(livroRepository).save(Mockito.<Livro>any());
+        verify(livroRepository).save(Mockito.any());
         assertSame(livro2, actualAdicionarExemplaresResult);
     }
 
@@ -565,11 +531,11 @@ class LivroServiceTest {
         livro.setPaginas(1);
         livro.setTitulo("Titulo");
         Optional<Livro> ofResult = Optional.of(livro);
-        when(livroRepository.save(Mockito.<Livro>any())).thenThrow(new ObjetoNaoExisteException());
+        when(livroRepository.save(Mockito.any())).thenThrow(new ObjetoNaoExisteException());
         when(livroRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         assertThrows(ObjetoNaoExisteException.class, () -> livroServiceImpl.adicionarExemplares(1L, 10));
         verify(livroRepository).findById(Mockito.<Long>any());
-        verify(livroRepository).save(Mockito.<Livro>any());
+        verify(livroRepository).save(Mockito.any());
     }
 
     /**
@@ -635,11 +601,11 @@ class LivroServiceTest {
         livro3.setLivroDoMes(true);
         livro3.setPaginas(1);
         livro3.setTitulo("Titulo");
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro3);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro3);
         when(livroRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
         Livro actualAdicionarExemplaresResult = livroServiceImpl.adicionarExemplares(1L, 10);
         verify(livroRepository).findById(Mockito.<Long>any());
-        verify(livroRepository).save(Mockito.<Livro>any());
+        verify(livroRepository).save(Mockito.any());
         assertSame(livro3, actualAdicionarExemplaresResult);
     }
 
@@ -696,12 +662,12 @@ class LivroServiceTest {
         livro3.setPaginas(1);
         livro3.setTitulo("Titulo");
         when(livroRepository.findFirstByLivroDoMesTrue()).thenReturn(livro2);
-        when(livroRepository.save(Mockito.<Livro>any())).thenReturn(livro3);
-        when(livroRepository.findByIsbn(Mockito.<String>any())).thenReturn(livro);
+        when(livroRepository.save(Mockito.any())).thenReturn(livro3);
+        when(livroRepository.findByIsbn(Mockito.any())).thenReturn(livro);
         Livro[] actualAtualizarLivroDoMesResult = livroServiceImpl.atualizarLivroDoMes("Isbn");
-        verify(livroRepository).findByIsbn(Mockito.<String>any());
+        verify(livroRepository).findByIsbn(Mockito.any());
         verify(livroRepository).findFirstByLivroDoMesTrue();
-        verify(livroRepository).save(Mockito.<Livro>any());
+        verify(livroRepository).save(Mockito.any());
         assertEquals(2, actualAtualizarLivroDoMesResult.length);
         assertSame(livro3, actualAtualizarLivroDoMesResult[1]);
     }
@@ -727,9 +693,9 @@ class LivroServiceTest {
         livro.setPaginas(1);
         livro.setTitulo("Titulo");
         when(livroRepository.findFirstByLivroDoMesTrue()).thenThrow(new NoSuchElementException("foo"));
-        when(livroRepository.findByIsbn(Mockito.<String>any())).thenReturn(livro);
+        when(livroRepository.findByIsbn(Mockito.any())).thenReturn(livro);
         assertThrows(NoSuchElementException.class, () -> livroServiceImpl.atualizarLivroDoMes("Isbn"));
-        verify(livroRepository).findByIsbn(Mockito.<String>any());
+        verify(livroRepository).findByIsbn(Mockito.any());
         verify(livroRepository).findFirstByLivroDoMesTrue();
     }
 

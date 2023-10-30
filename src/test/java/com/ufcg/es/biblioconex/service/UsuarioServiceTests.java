@@ -26,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {UsuarioServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-class UsuarioServiceTest {
+class UsuarioServiceTests {
     @MockBean
     private ModelMapper modelMapper;
 
